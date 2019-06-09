@@ -1,6 +1,6 @@
 # 简单题
 
-## (leetcode-1 two sum)[https://leetcode.com/problems/two-sum/]
+## [leetcode-1 two sum](https://leetcode.com/problems/two-sum/)
 解法1：枚举。两层嵌套循环，时间复杂度O(n^2)。   
 解法2：使用字典，时间复杂度O(n)。  
 ```
@@ -15,7 +15,7 @@ class Solution:
                 d[x] = i
 ```
 
-## (leetcode-15 3sum)[https://leetcode.com/problems/3sum/]
+## [leetcode-15 3sum](https://leetcode.com/problems/3sum/)
 **硅谷常考题**  
 解法1：枚举。三层嵌套循环，时间复杂度O(n^3)。  
 **解法2：枚举前两个数，然后在字典里查询第三个数。时间复杂度O(n^2)。**  
