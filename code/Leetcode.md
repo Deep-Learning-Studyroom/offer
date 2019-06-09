@@ -47,3 +47,25 @@ class Solution:
 - list在Python2和Python3里不一样。Python2返回列表，Python3返回迭代器，需要外加一个list()函数才能变成列表。
 - 开始排序一下，后面方便跳过相同的数。
 - 第一层循环遍历的是nums[:-2],不是nums，否则会报错。
+
+
+## [leetcode-69 sqrtx](https://leetcode.com/problems/sqrtx/)
+
+解法1：二分法
+
+```python
+class Solution:
+    def mySqrt(self, x: int) -> int:
+        l = 0
+        r = x
+        while l < r:
+            mid = (l + r + 1) // 2
+            if mid * mid == x:
+                return mid
+            elif mid * mid > x:
+                r = mid - 1
+            else:
+                l = mid
+        return r
+```
+注意：由于输出是整数，和一般的二分查找不太一样，还是很容易出错的
