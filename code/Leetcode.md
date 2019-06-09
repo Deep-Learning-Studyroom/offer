@@ -1,4 +1,4 @@
-# 简单题
+
 
 ## [leetcode-1 two sum](https://leetcode.com/problems/two-sum/)
 解法1：枚举。两层嵌套循环，时间复杂度O(n^2)。   
