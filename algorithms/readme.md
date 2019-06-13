@@ -1,7 +1,7 @@
 # 面试问题
 # TODO：
 - [ ] R-CNN系列论文重读及总结
-    - [ ] R-CNN
+    - [X] R-CNN
     - [ ] Fast R-CNN
     - [ ] Faster R-CNN
     - [ ] Focal loss(Retina net)
