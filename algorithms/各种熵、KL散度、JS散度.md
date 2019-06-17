@@ -3,13 +3,13 @@
 交叉熵可以衡量真实分布p和预测分布q之间的差异。**交叉熵，其用来衡量在给定的真实分布下，使用非真实分布所指定的策略消除系统的不确定性所需要付出的努力的大小。** 交叉熵越低，这个策略就越好，最低的交叉熵也就是使用了真实分布所计算出来的信息熵，因为此时交叉熵 = 信息熵。这也是为什么在机器学习中的分类算法中，我们总是最小化交叉熵，因为交叉熵越低，就证明由算法所产生的策略最接近最优策略，也间接证明我们算法所算出的非真实分布越接近真实分布。
 
 交叉熵的公式：  
-$$H(p || q) = \sum^{N}_{k=1}{p_klog_2\frac{1}{q_k}}$$  
+$H(p || q) = \sum^{N}_{k=1}{p_klog_2\frac{1}{q_k}}$
 
 # 相对熵(relative entropy) 
 **我们如何去衡量不同策略之间的差异呢？这就需要用到相对熵，其用来衡量两个取值为正的函数或概率分布之间的差异**，即： 
-$$KL(f(x) || g(x)) = \sum_{x \epsilon X}{f(x) * log_2\frac{f(x)}{g(x)}}$$
+$KL(f(x) || g(x)) = \sum_{x \epsilon X}{f(x) * log_2\frac{f(x)}{g(x)}}$
 相对熵和交叉熵之间的关系：  
-$$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \sum^{k=1}_{N}{p_k * log_2 \frac{1}{q_k}} - \sum^{k=1}_{N}{p_k * log_2 \frac{1}{p_k}}$$  
+$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \sum^{k=1}_{N}{p_k * log_2 \frac{1}{q_k}} - \sum^{k=1}_{N}{p_k * log_2 \frac{1}{p_k}}$  
 现在，假设我们想知道某个策略和最优策略之间的差异，我们就可以用相对熵来衡量这两者之间的差异。即，**相对熵 = 某个策略的交叉熵 - 信息熵（根据系统真实分布计算而得的信息熵，为最优策略）。**
 相对熵（relative entropy）又称为KL散度（Kullback–Leibler divergence，简称KLD），信息散度（information divergence），信息增益（information gain）。
 # KL散度(Kullback–Leibler divergence)  
@@ -17,4 +17,4 @@ $$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \s
 # JS散度  
 **KL散度是不对称的， 而JS散度由KL散度计算而来，是对称的。**  
 公式如下：  
-$$JS(p || q) = \frac{1}{2}KL(p || \frac{p + q}{2}) + \frac{1}{2}KL(q || \frac{p + q}{2})$$
+$JS(p || q) = \frac{1}{2}KL(p || \frac{p + q}{2}) + \frac{1}{2}KL(q || \frac{p + q}{2})$
