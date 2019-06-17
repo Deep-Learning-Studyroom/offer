@@ -123,3 +123,29 @@ class Solution:
         return res             
 ```
 
+# [leetcode-20 valid-parentheses(括号匹配问题)](https://leetcode.com/problems/valid-parentheses/)
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        if not str:
+            return true
+        stack = []
+        d = {'(':0, '[':0, '{':0, ')':1, ']':1, '}':1}
+        d2 = {')':'(', ']':'[', '}':'{'}
+        for i in s:
+            if i not in d:
+                raise ValueError
+            if d[i] == 0:
+                stack.append(i)
+            else:
+                if stack and d2[i] == stack[-1]:
+                    stack.pop()
+                else:
+                    return False
+        if stack:
+            return False
+        else:
+            return True
+```
+

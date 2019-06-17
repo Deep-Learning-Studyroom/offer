@@ -1,11 +1,14 @@
 def fibo(n):
-    if n <= 0:
+    first_number = 0
+    second_number = 1
+
+    if n == 0:
         return 0
     elif n == 1:
         return 1
-    
-    return fibo(n-1) + fibo(n-2)
-    
+    for _ in range(n):
+        first_number, second_number = second_number, first_number+second_number
+    return first_number
 
 if __name__ == '__main__':
     print(fibo(5))
