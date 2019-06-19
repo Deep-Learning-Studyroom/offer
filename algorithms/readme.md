@@ -2,7 +2,7 @@
 # TODO：
 - [ ] R-CNN系列论文重读及总结
     - [X] R-CNN
-    - [ ] Fast R-CNN
+    - [X] Fast R-CNN
     - [ ] Faster R-CNN
     - [ ] Focal loss(Retina net)
     - [ ] Mask R-CNN
