@@ -1,13 +1,44 @@
-def iou(x1,y1,w1,h1,x2,y2,w2,y2):
-    up = min(y1 + h1 / 2, y2 + h2 / 2)
-    down = max(y1 - h1 / 2, y2 - h2 / 2)
-    left = max(x1 - w1 / 2, x2 - w2 / 2)
-    right = min(x1 + w1 / 2, x2 + w2 / 2)
+'''
+def partition(num, low, high):
+    pivot = num[low] 
+    while low < high:
+        while low < high and pivot < num[high]:
+            high -= 1
+        while low < high and num[low] < pivot:
+            low += 1
+        num[low], num[high] = num[high], num[low]
+        num[high] = pivot
+    return high, num
 
-    intersetion = abs((up - down) * (right - left))
-    union = w1 * h1 + w2 * h2 - intersetion
-    return intersetion / union
-    
+def findkth(num, low, high, k):
+    index = (partition(num, low, high))[0]
+    #print(partition(num, low, high)[1])
+    if index == k:
+        return num[index]
+    elif index < k:
+        return findkth(num, index+1, high, k)
+    else:
+        return findkth(num, low, index-1, k)
+'''
+def partition(num, low, high):
+    pivot = num[low]
+    while (low < high):
+        while (low < high and num[high] > pivot):
+            high -= 1
+        while (low < high and num[low] < pivot):
+            low += 1
+        num[low],num[high] = num[high],num[low]
+    num[high] = pivot
+    return high,num
+
+def findkth(num,low,high,k):   #找到数组里第k个数
+        index=(partition(num,low,high))[0]
+        print((partition(num,low,high))[1])
+        if index==k:return num[index]
+        if index<k:
+            return findkth(num,index+1,high,k)
+        else:
+            return findkth(num,low,index-1,k)    
 
 if __name__ == '__main__':
-    print(fibo(5))
+    print(findkth([6,1,3,9,2],0,len([6,1,3,9,2])-1,4))
