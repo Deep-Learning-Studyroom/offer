@@ -148,4 +148,323 @@ class Solution:
         else:
             return True
 ```
+# [leetcode-206 reverse-linked-list](https://leetcode.com/problems/reverse-linked-list/)
+
+```python
+#Definition for singly-linked list.
+#class ListNode:
+#    def __init__(self, x):
+#        self.val = x
+#        self.next = None
+
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        cur, pre = head, None
+        while cur:
+            cur.next, pre, cur = pre, cur, cur.next
+        return pre
+```
+
+**注意：链表的问题想法都很简单，主要考察代码实现能力**  
+
+# [swap-nodes-in-pairs](https://leetcode.com/problems/swap-nodes-in-pairs/)  
+
+```python3
+
+
+```
+
+**有难度，很容易写错**  
+
+# [leetcode-141 linked-list-cycle](https://leetcode.com/problems/linked-list-cycle/)
+
+**面试高频题** 给定一个链表，判断是否有环  
+
+解法1：硬做。不断看next，如果发现有None就返回False(没有)，如果在一定时间内都找不到None则返回True。原因，有环的链表的任意一个元素next指针不为None。  
+
+解法2：set，判断是否重复。 O(n) 
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        nodes = set()
+        
+        current_node = head
+        while current_node:
+            if current_node in nodes:
+                return True
+            else:
+                nodes.add(current_node)
+            current_node = current_node.next
+            
+        return False
+```
+解法3：快慢指针。快指针每次走两步，慢指针每次走一步。最后判断快与慢相遇。O(n)，但是空间复杂度比解法2低。
+
+```python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        fast = slow = head
+        while slow and fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow is fast:
+                return True
+        return False
+```
+
+
+# [leetcode242 valid-anagram](https://leetcode.com/problems/valid-anagram/)
+
+解法1：使用快速排序分别排序两个字符串，然后比较两者是否相同。时间复杂度O(nlog(n))。
+
+解法2：使用map计数。即使分别用一个字典记录对于每一个字符串其中每个字符出现的次数。然后比较是否相同。由于字典的插入、删除和索引都是O(1)的，因此该算法时间复杂度是O(n)。
+
+解法3:使用map计数。但是不使用字典结构，而是使用列表构建哈希表，哈希函数就是每个元素的ASCII码减去a的ASCII码。这种方法比解法2还会稍微快一点。时间复杂度也是O(n)。
+
+解法2代码  
+```python
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        dict1, dict2 = {}, {}
+        for i in s:
+            dict1[i] = dict1.get(i, 0) + 1
+        for j in t:
+            dict2[j] = dict2.get(j, 0) + 1
+        return dict1==dict2
+```
+**这里需要注意一下，字典的get方法比直接dict[i]来获取value更好，因为前者在没有这个键的时候不会报错，会返回设置的default值**
+
+解法3代码  
+```python
+class Solution(object):
+    def isAnagram(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        dic1, dic2 = [0] * 26, [0] *26
+        for i in s:
+            dic1[ord(i) - ord('a')] += 1
+        for j in t:
+            dic2[ord(j) - ord('a')] += 1
+        return dic1 == dic2
+```
+
+# [leetcode-98 validate-binary-search-tree](https://leetcode.com/problems/validate-binary-search-tree/)
+
+解法1：中序遍历。看遍历出来的序列是不是**升序**的。时间复杂度是O(n)  
+
+解法2：recursive。validate(···, min, max) 这个函数要向外面传两个值，min和max。validate(node.left) --> max, validate(node.right) --> min ，max < root, min > root即可。时间复杂度是O(n)
+
+解法1代码  
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        inorder = self.inorder(root)
+        
+        return inorder == list(sorted(set(inorder)))
+    def inorder(self, root):
+        if root is None:
+            return []
+        return self.inorder(root.left) + [root.val] + self.inorder(root.right)
+```
+**注意：由于之前不熟悉二叉树，函数里面什么时候用root，什么时候用self容易搞混**
+
+Runtime: 44 ms, faster than 29.23% of Python online submissions for Validate Binary Search Tree.  
+Memory Usage: 17.5 MB, less than 5.03% of Python online submissions for Validate Binary Search Tree.  
+**从上面可以看出空间复杂度非常大，修改方法就是每次遍历不需要把所有的都存下来，只需要判断当前节点是否比前继节点满足递增的关系，如果不是就返回False，如果满足就继续判断**
+
+解法1的改进代码  
+```python 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        self.prev = None
+        return self.helper(root)
+    
+    def helper(self, root):
+        if root is None:
+            return True
+        if not self.helper(root.left):
+            return False
+        if self.prev and self.prev.val >= root.val:
+            return False
+        self.prev = root
+        return self.helper(root.right)
+```
+Runtime: 28 ms, faster than 97.82% of Python online submissions for Validate Binary Search Tree.  
+Memory Usage: 16.8 MB, less than 20.61% of Python online submissions for Validate Binary Search Tree.  
+
+解法2代码：  
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isValidBST(self, root, lo=float('-inf'), hi=float('inf')):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        
+        def BST(n, min_val, max_val):
+            if not n:
+                return True
+            if not min_val < n.val < max_val:
+                return False
+            return BST(n.left, min_val, n.val) and BST(n.right, n.val, max_val)         
+        return BST(root,-float("inf"), float("inf"))
+```
+
+# [leetcode-236 lowest-common-ancestor-of-a-binary-tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)  
+
+对于一个普通二叉树（不一定是二叉搜索树），找p和q的共同最近祖先  
+
+解法1：分别从p和q往回走，记录下路径，然后找两个路径最开始相遇的点。但是由于二叉树没有parent指针，所以这个方法没法实现。但是可以从root节点遍历找p, q，然后比较路径上最后相同的点。时间复杂度是O(n)，但是是3n，而且实现起来不简单。
+
+解法2：recursion。 设计一个函数findPorQ(root, p, q)， 如果root等于p或者q就返回root，否则就分别在root.left和root.right两个子树调用findPorQ。时间复杂度O(n)。
+
+解法2的代码  
+```python 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        if root == None:
+            return None
+        if root == p or root == q:
+            return root
+        tree_node_left = self.lowestCommonAncestor(root.left, p, q)
+        tree_node_right = self.lowestCommonAncestor(root.right, p, q)
+        if tree_node_left == None:
+            return tree_node_right
+        elif tree_node_right == None:
+            return tree_node_left
+        else:
+            return root
+```
+**这个算法非常好，多想一想**
+
+# [leetcode-235 lowest-common-ancestor-of-a-binary-search-tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+解法：这是236的简化版本。用递归的方法做，如果p/q都比root小，所以它们应该在左子树里面；如果p/q都比root大，那么它们应该在右子树里面，如果一个比root小，一个比root大，那么返回root。
+
+代码
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        if p.val < root.val > p.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        elif p.val > root.val < q.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        else:
+            return root
+```
+**注意：这个代码运行出错了，感觉很奇怪！**   
+
+非递归的做法
+
+```python
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        while root:
+            if p.val < root.val > q.val:
+                root = root.left
+            elif p.val > root.val < q.val:
+                root = root.right
+            else:
+                return root
+```
+
+
+
 
