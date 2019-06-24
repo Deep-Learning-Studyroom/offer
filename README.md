@@ -9,6 +9,7 @@
 
 ## 其他链接
 [AI-Job-Notes](https://github.com/amusi/AI-Job-Notes)
+[Deep-Learning-Interview-Book](https://github.com/ArtechStark/Deep-Learning-Interview-Book)
 [shufangxun](https://github.com/shufangxun/DS-and-AL)
 
 ## 重要面经的链接  
