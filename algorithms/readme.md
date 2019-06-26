@@ -4,7 +4,7 @@
     - [X] R-CNN
     - [X] Fast R-CNN
     - [x] Faster R-CNN
-    - [ ] Focal loss(Retina net)
+    - [x] Focal loss(Retina net)
     - [ ] Mask R-CNN
 - [ ] YOLO v1 v2 v3
     - [ ] Yolo v1

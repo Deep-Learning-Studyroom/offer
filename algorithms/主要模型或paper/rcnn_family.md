@@ -7,6 +7,8 @@
 
 <a href="#Faster R-CNN">Faster R-CNN</a>
 
+<a href="#Focal loss">Focal loss</a>
+
 
 
 # R-CNN
@@ -77,3 +79,15 @@ label的分配方法是将与gt的iou大于0.5的作正例，其他的都为负�
    - 最后一步仅仅微调检测模型的FC部分，其他地方不动。
    - 以上四步很精妙，因为训练的关键是如何让两个部分共享这个VGG网络。VGG网络必须专注于深层次语义的提取，这就必须用于分类的训练。如果VGG被直接用来微调在RPN上，那么imagenet的预训练可能就白费了，因为RPN的重点在浅层的位置信息。但是又不能直接去训练后面检测模型的分类部分，因为检测模型的训练必须要RPN提供的proposals。所以才使用了这种方法，先训练一个临时的RPN，用来提供训练检测模型需要的东西，然后再在这个检测模型的基础上把真正的RPN部分训练出来。
 5. 为了减少冗余，两个anchor的IOU如果超过0.7，就要去除一个，去留的条件根据它们的分类 score来决定（NMS）。做完NMS之后，再根据score选取top-k个anchor。
+
+# Focal loss
+
+直入主题，Focal loss这篇文章提出了focal loss，并做了一个retinanet。应该是因为one-stage模型盛行，速度确实很快，所以希望能做一个速度精度都高的模型。
+
+## Focal loss
+
+focal loss的公式是$$FL(p_t) = -\alpha_t(1-p_t)^\gamma\log(p_t)$$, 其中$$p_t= \begin{cases} p  &if \quad y=1\\1-p &otherwise \end{cases}$$ 。先不看$$\alpha_t$$,可以看出，focal loss实际上是加强了对分类置信度较低时的惩罚，无论样本的正负。而因为本文初衷是为了hard negative mining，从而解决easy examples dominant的问题，所以又加上了一个$$\alpha_t$$，它的取值取决于一个作者设定的值$$\alpha$$，当y=1时，$$\alpha_t=\alpha$$；当y=0时，$$\alpha_t=1-\alpha$$。文章中将这个值设为了0.25，也就是说，对于正例有0.25的权重，对于负例有0.75的权重，这样就可以将模型的训练重心放到hard negative examples上来。文章的$$\gamma$$取到2时是最好效果。
+
+## RetinaNet
+
+RetinaNet比较简单，并没有做太大的改动。首先它是one-stage的模型，使用了FPN作为backbone，有预设anchor尺寸，仍然是feature map的每个点有9个anchor。然后对每个feature map分别使用了两个分支预测出坐标偏移量和类别（文章中的类别数是不包括背景的），使用的是3x3卷积组成的FCN。关于NMS，这里用的阈值是0.5，与faster rcnn中的0.7不同。训练时，正例的阈值是0.5，负例的阈值是0-0.4。也就是说0.4-0.5之间的不参与训练。
