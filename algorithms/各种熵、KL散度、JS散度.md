@@ -15,7 +15,7 @@ $$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \s
 现在，假设我们想知道某个策略和最优策略之间的差异，我们就可以用相对熵来衡量这两者之间的差异。即，**相对熵 = 某个策略的交叉熵 - 信息熵（根据系统真实分布计算而得的信息熵，为最优策略）。**
 相对熵（relative entropy）又称为KL散度（Kullback–Leibler divergence，简称KLD），信息散度（information divergence），信息增益（information gain）。
 
-**注意：**KL散度和逆KL散度(p, q位置互换)是不相等的。非对称性意味着使用KL散度或者逆KL散度作为优化目标，其得到的结果将具有显著差异。例如，用分布q去拟合分布p，选择KL散度，Q会将诸多高概率的峰值糊化。
+**注意** ,KL散度和逆KL散度(p, q位置互换)是不相等的。非对称性意味着使用KL散度或者逆KL散度作为优化目标，其得到的结果将具有显著差异。例如，用分布q去拟合分布p，选择KL散度，Q会将诸多高概率的峰值糊化。
 
 ![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/use_q_to_fit_p_by_kl_divergence.jpg) 
 
