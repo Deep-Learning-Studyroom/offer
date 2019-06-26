@@ -3,6 +3,8 @@
 ## GAN基本原理
 [goodfellow论文]()
 
+对GAN的理解不能停留在简单的“生成器产生样本，判别器分辨样本真假”的阶段。深入的理解是：**先学习一个关于生成器定义的隐式概率分布和训练数据定义的本质概率分布之间的距离度量，然后优化生成器来缩减这个距离度量**。
+
 
 ## GAN的优点
 - 计算梯度时只用到了反向传播，而不需要马尔科夫链
@@ -29,3 +31,4 @@ Goodfellow等从理论上证明了当GAN模型收敛时，生成数据具有和�
 - d_loss_fake = criterion(outputs, fake_labels)
 
 **g_loss = criterion(D(fake_images), real_labels)**
+
