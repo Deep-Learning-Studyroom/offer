@@ -9,7 +9,9 @@ $$H(p || q) = \sum^{N}_{k=1}{p_klog_2\frac{1}{q_k}}$$
 **我们如何去衡量不同策略之间的差异呢？这就需要用到相对熵，其用来衡量两个取值为正的函数或概率分布之间的差异**，即： 
 $$KL(f(x) || g(x)) = \sum_{x \epsilon X}{f(x) * log_2\frac{f(x)}{g(x)}}$$
 相对熵和交叉熵之间的关系：  
-$$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \sum^{k=1}_{N}{p_k * log_2 \frac{1}{q_k}} - \sum^{k=1}_{N}{p_k * log_2 \frac{1}{p_k}}$$  
+
+$$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \sum^{k=1}_{N}{p_k * log_2 \frac{1}{q_k}} - \sum^{k=1}_{N}{p_k * log_2 \frac{1}{p_k}}$$ 
+ 
 现在，假设我们想知道某个策略和最优策略之间的差异，我们就可以用相对熵来衡量这两者之间的差异。即，**相对熵 = 某个策略的交叉熵 - 信息熵（根据系统真实分布计算而得的信息熵，为最优策略）。**
 相对熵（relative entropy）又称为KL散度（Kullback–Leibler divergence，简称KLD），信息散度（information divergence），信息增益（information gain）。
 # KL散度(Kullback–Leibler divergence)  
