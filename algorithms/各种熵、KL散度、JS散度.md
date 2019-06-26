@@ -17,10 +17,10 @@ $$KL(p || q) = \sum^{k=1}_{N}{p_k * log_2 \frac{p_k}{q_k}} = H(p, q) - H(p) = \s
 
 **注意：**KL散度和逆KL散度(p, q位置互换)是不相等的。非对称性意味着使用KL散度或者逆KL散度作为优化目标，其得到的结果将具有显著差异。例如，用分布q去拟合分布p，选择KL散度，Q会将诸多高概率的峰值糊化。
 
-![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/use q to fit p by kl divergence.jpg) 
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/use_q_to_fit_p_by_kl_divergence.jpg) 
 
 如果使用逆KL散度，则会导致q去拟合高概率的单峰。
-![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/use q to fit p by reverse kl divergence.jpg) 
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/use_q_to_fit_p_by_reverse_kl_divergence.jpg) 
 
 # JS散度  
 **KL散度是不对称的， 而JS散度由KL散度计算而来，是对称的。**  
