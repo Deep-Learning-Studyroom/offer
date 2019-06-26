@@ -11,3 +11,6 @@
     - [ ] Yolo v2
     - [ ] Yolo v3
 - [ ] SSD
+- [ ] [cycle-GAN](https://github.com/ArtechStark/pytorch-CycleGAN-and-pix2pix)
+- [ ] WGAN，两篇论文
+- [ ] 
