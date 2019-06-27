@@ -53,3 +53,19 @@ if __name__ == '__main__':
 ```
 归并排序思想，这个版本是从讨论区java版本复现来的，但是说时间复杂度过高，很郁闷。总之这道题思路就是在归并排序的过程中统计逆序对，具体见https://www.nowcoder.com/profile/1591420/codeBookDetail?submissionId=15823415
 
+# <a href="https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&tqId=11199&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">孩子们的游戏</a>
+
+一个环，由n个顺序数字组成（0 ~ n-1），任给一个数字m，从0开始往环的前向走，将第m-1个数字移出队伍。然后从这个数字的后一个数字起再移出它后面的第m-1个数字。直到这个环只剩一个数字时，输出这个数字。
+
+```python
+def LastRemaining_Solution(n, m):
+  if not n or not m:
+    return -1
+  kids = range(n)
+  start = 0
+  while(len(kids) > 1):
+    start = (start + m -1) % len(kids)
+    kids.pop(start)
+  return kids[0]
+```
+
