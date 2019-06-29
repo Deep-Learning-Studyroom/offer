@@ -123,3 +123,52 @@ class Solution:
         return None
 ```
 
+
+
+# 滑动窗口的最大值
+
+输入一个list和一个size，以size为长的窗口在list上滑动，输出每一次滑动时窗口内的最大值。 如输入数组[2,3,4,2,6,2,5,1],size为3.那么一共有6个窗口，他们的最大值分别为[4,4,6,6,6,5]。
+
+```python
+# 不用任何数学函数的版本，利用q和p作为窗口的第一个和最后一个值，用max_val储存上个窗口的最大值，用index代表上个窗口最大值的索引，每次滑动时，如果新的值大于max_val，则新的值最大。如果新的值不大于max_val，则需判断max_val是否还在窗口内，如果在，直接到下一个窗口，如果不在，则重新计算当前范围内最大值。
+# -*- coding:utf-8 -*-
+class Solution:
+    def maxInWindows(self, num, size):
+        # write code here
+        if num is None or size == 0:
+            return []
+        if size > len(num):
+            return []
+        result = []
+        q = 0
+        p = size - 1
+        start = 1
+        max_v = 0
+        index = 0
+        while p < len(num):
+            if max_v <= num[p] and start == 0:
+                max_v = num[p]
+                index = p
+                result.append(max_v)
+                p += 1
+                q += 1
+            else:
+                if q <= index <= p and start == 0:
+                    result.append(max_v)
+                    q += 1
+                    p += 1
+                    continue
+                else:
+                    max_v = num[q]
+                    index = q
+                    for i in range(q+1,p+1):
+                        if max_v < num[i]:
+                            max_v = num[i]
+                            index = i
+                    result.append(max_v)
+                    p += 1
+                    q += 1
+                    start = 0
+        return result
+```
+
