@@ -69,3 +69,57 @@ def LastRemaining_Solution(n, m):
   return kids[0]
 ```
 
+
+
+# 二叉搜索树的第K个节点
+
+给一棵二叉搜索树的根节点和k，给出第k大的那个节点。直接使用中序遍历即可，以下是非递归版本
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Stack: 
+    """模拟栈""" 
+    def __init__(self): 
+        self.items = [] 
+
+    def isEmpty(self): 
+        return len(self.items)==0  
+
+    def push(self, item): 
+        self.items.append(item) 
+
+    def pop(self): 
+        return self.items.pop()  
+
+    def peek(self): 
+        if not self.isEmpty(): 
+            return self.items[len(self.items)-1] 
+
+    def size(self): 
+        return len(self.items) 
+class Solution:
+    # 返回对应节点TreeNode
+    def KthNode(self, pRoot, k):
+        # write code here
+        if not pRoot or k == 0:
+            return None
+        s = Stack()
+        i = 0
+        cur = pRoot
+        while s.isEmpty() == False or cur != None:
+            while cur != None:
+                s.push(cur)
+                cur = cur.left
+            cur = s.pop()
+            i += 1
+            if k == i:
+                return cur
+            cur = cur.right
+        return None
+```
+
