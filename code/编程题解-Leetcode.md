@@ -67,3 +67,41 @@ class Solution:
 4. 当x1 = x2 and y1 = y2时， 待输入矩阵的维度为1 x 1
 
 所以，遍历时，矩阵的上边和右边为一组，下边和左边为一组，只要通过控制四点，并且按顺序遍历即可。
+
+# <a href="https://leetcode.com/problems/add-two-numbers/">Add Two Numbers</a>
+
+这道题只需要建立一个carry位，它一直累加本位的数字，给result的本位上赋值carry % 10， 并且到下一位时使用carry /= 10即可获得进位的数字。 唯一要注意的是在carry /= 10时需要强制转换为int类型。
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        if not l1:
+            return l2
+        if not l2:
+            return l1
+        carry = 0
+        p = l1
+        q = l2
+        result = ListNode(0)
+        r = result
+        while p != None or q != None:
+            carry = int(carry / 10)
+            if p != None:
+                carry += p.val
+                p = p.next
+            if q!= None:
+                carry += q.val
+                q = q.next
+            r.next = ListNode(carry % 10)
+            r = r.next
+        if int(carry / 10) == 1:
+            r.next = ListNode(1)
+        return result.next
+```
+
