@@ -105,3 +105,75 @@ class Solution:
         return result.next
 ```
 
+# <a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/">Longers substring without repeating characters</a>
+
+这道题要找到字符串中连续地不重复的子串， 注意，要是连续的。所以设置一个最大长度的标识max_c，每一次遍历字母都更新一遍最大值。并设置一个当前子串的开头索引start，用字典记录字母是否出现，字典每次都保存字母最后一次出现的坐标。当发现重复字母时，将start设为”start"和"上一次出现这个字母的位置+1"之间的最大值。
+
+```python
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if s == "":
+            return 0
+        if len(s) == 1:
+            return 1
+        max_c = 0
+        d = {}
+        start = 0
+        for i in range(len(s)):
+            if s[i] in d:
+                start = max(start, d[s[i]] + 1)
+            d[s[i]] = i
+            max_c = max(max_c, i - start +1)
+        return max_c
+```
+
+# <a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">Median of Two Sorted Arrays</a>
+
+给定两个排好序的数组，求这两个数组合并后的平均数，要求时间复杂度在O（log（m+n))。我的思路是先算两个list的总长度，如果总长是奇数，则平均数是中间的那个数，如果总长是偶数，则平均数是中间两个数的平均数，以此得到我们想要寻找的数字在总长中的index。然后设置p1,p2两个指针分别指向两个数组， 对前面求出的index ”i“进行遍历，每次将指针指向的数字较小的那一个指针+1，并设置一个i_v保存当前值。这样可以找到合并数组的第i个数，然后得出平均数。
+
+```python
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        len1 = len(nums1)
+        len2 = len(nums2)
+        all_len = len1 + len2
+        i = -1
+        j = -1
+        if all_len % 2 == 0:
+            i = int((all_len - 1) / 2)
+            j = i + 1
+        else:
+            i = (all_len - 1) / 2
+        p1 = 0
+        p2 = 0
+        i_v = -1
+        for _ in range(int(i+1)):
+            if p1 < len1 and p2 < len2:
+                if nums1[p1] < nums2[p2]:
+                    i_v = nums1[p1]
+                    p1 += 1
+                    
+                else:
+                    i_v = nums2[p2]
+                    p2 += 1
+            elif p1 >= len1:
+                i_v = nums2[p2]
+                p2 += 1
+            else:
+                i_v = nums1[p1]
+                p1 += 1
+        if j == -1: # j=-1，说明总长是奇数，直接返回位置i的数字
+            return i_v
+        else:
+            if p1 >= len1:
+                return (nums2[p2] + i_v) / 2
+            elif p2 >= len2:
+                return (nums1[p1] + i_v) / 2
+            else:
+                return (min(nums1[p1], nums2[p2]) + i_v) / 2
+```
+
+
+
+
+
