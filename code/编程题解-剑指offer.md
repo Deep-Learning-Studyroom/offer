@@ -172,3 +172,59 @@ class Solution:
         return result
 ```
 
+# 数组中重复的数字
+
+1. 排序后遍历找重复数字 O(nlogn)
+2. 用一个字典来找重复数字 时间和空间都是O(n)
+3. 时间O(n), 空间O(1)。 方法是遍历list，使每一个空间都保存与下标同样的值。详情见剑指offer书
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # 这里要特别注意~找到任意重复的一个值并赋值到duplication[0]
+    # 函数返回True/False
+    def duplicate(self, numbers, duplication):
+        # write code here
+        n = len(numbers)
+        if n == 0:
+            return False
+        for i in range(n):
+            if numbers[i] > n - 1:
+                return False
+            while numbers[i] != i:
+                if numbers[numbers[i]] == numbers[i]:
+                    duplication[0] = numbers[i]
+                    return True
+                else:
+                    t = numbers[numbers[i]]
+                    numbers[numbers[i]] = numbers[i]
+                    numbers[i] = t
+        return False
+```
+
+# 在二维数组中查找数字
+
+​	输入给一个二维矩阵，这个矩阵的数字排序是从左向右递增、从上往下递增的。给定一个目标数字，判断这个数字是否存在矩阵内。做法是取矩阵的左下角或右上角，必须取这两个点，因为这两个点所在的行和列分别是大于或小于它们的，下面的代码选择的左下角。当左下角的数字大于目标数字时，则将左下角数字的坐标行-1，若小于目标数字时，则把左下角数字的列+1。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # array 二维列表
+    def Find(self, target, array):
+        # write code here
+        if len(array) == 0:
+            return False
+        row = len(array)
+        col = len(array[0])
+        left_down_col = 0
+        left_down_row = row - 1
+        while left_down_row >= 0 and left_down_col < col:
+            if array[left_down_row][left_down_col] == target:
+                return True
+            elif array[left_down_row][left_down_col] < target:
+                left_down_col += 1
+            else:
+                left_down_row -= 1
+        return False
+```
+
