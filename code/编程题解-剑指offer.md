@@ -228,3 +228,28 @@ class Solution:
         return False
 ```
 
+# 替换空格
+
+将输入的字符串中所有的空格替换为”%20“，这道题用Python实现起来比较容易，但是和C++原生数组的话差的也不多，如果是C++的话需要提前分配好空间才可以插入。思路是对字符串从尾部开始，将这些值用头插法赋值给result，如果碰到空格，则连续插入%20。直接用list的insert方法会比较方便。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s 源字符串
+    def replaceSpace(self, s):
+        # write code here
+        result = list()
+        i = len(s) - 1
+        while i >= 0:
+            if s[i] != ' ':
+                result.insert(0, s[i])
+                i -= 1
+            else:
+                result.insert(0, "0")
+                result.insert(0, "2")
+                result.insert(0, "%")
+                i -= 1
+        result = "".join(result)
+        return result
+```
+
