@@ -253,3 +253,36 @@ class Solution:
         return result
 ```
 
+# 重建二叉树
+
+给定一个二叉树的前序遍历和中序遍历的list，把二叉树重建出来。思路就是递归，首先前序遍历的第一个数字是根节点，然后在中序遍历中找到这个数字，这个数字的左边是左子树，右边是右子树，这样在中序遍历中获得左右子树的长度。在前序遍历中用这个长度就可以获得左右子树的前序遍历，现在分别获得了左右子树的前序遍历和中序遍历，就可以分别对左右子树再次递归这一方法了。
+
+```python
+class TreeNode:
+	def __init__(self, x):
+      self.val = x
+      self.left = None
+      self.right = None
+class Solution:
+    # 返回构造的TreeNode根节点
+    def reConstructBinaryTree(self, pre, tin):
+        # write code here
+        if not pre or not tin:
+            return -1
+        length = len(pre)
+        return self.ConstructCore(pre, tin)
+    
+    def ConstructCore(self, pre, tin):
+        root = TreeNode(pre[0])
+        if len(pre) == 1:
+            return root
+        for i in range(len(tin)):
+            if tin[i] == pre[0]:
+                break
+        if i > 0:
+            root.left = self.ConstructCore(pre[1:i+1], tin[0:i])
+        if i < len(tin) - 1:
+            root.right = self.ConstructCore(pre[i+1:], tin[i+1:])
+        return root
+```
+
