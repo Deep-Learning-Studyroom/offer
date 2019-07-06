@@ -1,4 +1,7 @@
+
+
 # R-CNN系列文章总结
+
 后面将重新阅读R-CNN系列的文章，从模型的创新、应用两方面进行总结。
 
 <a herf="#R-CNN">R-CNN</a>
@@ -9,7 +12,7 @@
 
 <a href="#Focal loss">Focal loss</a>
 
-
+<a href="#Mask R-CNN">Mask R-CNN</a>
 
 # R-CNN
 ## 贡献
@@ -91,3 +94,23 @@ focal loss的公式是$$FL(p_t) = -\alpha_t(1-p_t)^\gamma\log(p_t)$$, 其中$$p_
 ## RetinaNet
 
 RetinaNet比较简单，并没有做太大的改动。首先它是one-stage的模型，使用了FPN作为backbone，有预设anchor尺寸，仍然是feature map的每个点有9个anchor。然后对每个feature map分别使用了两个分支预测出坐标偏移量和类别（文章中的类别数是不包括背景的），使用的是3x3卷积组成的FCN。关于NMS，这里用的阈值是0.5，与faster rcnn中的0.7不同。训练时，正例的阈值是0.5，负例的阈值是0-0.4。也就是说0.4-0.5之间的不参与训练。
+
+# Mask R-CNN
+
+Mask R-CNN相较于Faster R-CNN有三个变化： 将backbone改成了FPN，加入了mask分支，将ROIPOOL换成了ROIALIGN。
+
+## ROIAlign
+
+ROIPooling首先会将回归预测数的小数量化回整数，然后划分格子（这个过程仍然会量化为整数），也就是说pool的过程并不平均。而ROIAlign放弃了量化回整数的操作，而是使用双线性插值，获得更精细的像素值，并且此时划分的格子也是严格平均的了。<https://zhuanlan.zhihu.com/p/37998710>这里还说的比较清楚。
+
+## Mask分支
+
+mask分支主要有几个地方要注意
+
+1. mask分支的损失L只在positive的ROI下会计算。
+2. mask分支的预测是使用的sigmoid，也就是说在当前ROI下，mask分支会对每种类别都预测出一张mask，然后根据分类分支中预测的分类来选择mask。这样能消除mask预测时的内类竞争，让mask分支专注于轮廓信息。
+
+## 训练细节
+
+1. 分配label，与GT的iou大于0.5的为正，其他的为负（每个版本都在变化，说明这个超参数是随着不同数据要调整的）
+2. batch_size是2，每张图都会采64个ROI，正负比例选取为1：3
