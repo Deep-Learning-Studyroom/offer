@@ -30,5 +30,7 @@ Goodfellow等从理论上证明了当GAN模型收敛时，生成数据具有和�
 - d_loss_real = criterion(outputs, real_labels)
 - d_loss_fake = criterion(outputs, fake_labels)
 
+**问题**：d_loss = d_loss_real + d_loss_fake和d_loss = d_loss_real - d_loss_fake哪个更好？  
+
 **g_loss = criterion(D(fake_images), real_labels)**
 
