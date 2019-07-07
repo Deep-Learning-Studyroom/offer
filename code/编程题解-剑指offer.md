@@ -286,3 +286,38 @@ class Solution:
         return root
 ```
 
+# 二叉树的下一个节点
+
+给定一个树的某一个节点，判断在中序遍历下，下一个节点是什么，这棵树除了左右子树指针，还有一个指向父节点的指针。要明确有三种情况，
+
+1. 当这个节点有右子树时，下一个节点是它的右子树的最左边节点，用一个while即可。
+2. 当这个节点没有右子树时，那就只有往上一直遍历父节点，只有当某一个节点是其父节点的左子树时，下一个节点就是父节点。
+3. 如果其上每一个父节点都是更高层父节点的右子树，一直延续到根节点，那么下一个节点为空。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeLinkNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+#         self.next = None
+class Solution:
+    def GetNext(self, pNode):
+        # write code here
+        if not pNode:
+            return None
+        if pNode.right:
+            p = pNode.right
+            while p.left:
+                p = p.left
+            return p
+        else:
+            cur = pNode
+            parent = pNode.next
+            while parent and parent.right == cur:
+                cur = parent
+                parent = parent.next
+            return parent
+```
+
