@@ -321,3 +321,29 @@ class Solution:
             return parent
 ```
 
+# 旋转数组的最小数字
+
+给定一个递增数组的旋转数组，找到数组中最小的数字。因为旋转数组一般来说有两个有序的子数组，并且最小的数字刚好是这两个子数组的分界。所以使用二分查找的方式来寻找这个数字。注意这个代码也不是完美的，当p1、p2、mid三个指针指向的数字一样大时，如[0, 1, 1, 1, ,1]的旋转，那这种方法就会失效，只能改用顺序查找的方式。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def minNumberInRotateArray(self, rotateArray):
+        # write code here
+        length = len(rotateArray)
+        if length == 0:
+            return 0
+        p1 = 0
+        p2 = length - 1
+        if rotateArray[p1] < rotateArray[p2]:
+            return rotateArray[p1]  # 如果第一个数小于最后一个数，说明数组是有序的，直接返回第一个数。
+        # 当两个指针相邻时，最小的数字是右边那个指针
+        while p1 + 1 != p2:
+            mid = int((p1 + p2) / 2)
+            if rotateArray[p1] <= rotateArray[mid]:
+                p1 = mid
+            else:
+                p2 = mid
+        return rotateArray[p2]
+```
+
