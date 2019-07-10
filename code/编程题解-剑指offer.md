@@ -347,3 +347,49 @@ class Solution:
         return rotateArray[p2]
 ```
 
+# 矩阵中的路径
+
+回溯法
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def hasPath(self, matrix, rows, cols, path):
+        # write code here
+        cur_path = 0
+        path = list(path)
+        matrix = list(matrix)
+        flag = []
+        for _ in range(rows * cols):
+            flag.append(0)
+        for row in range(rows):
+            for col in range(cols):
+                if self.hasPathCore(matrix, rows, cols, row, col, flag, path, cur_path):
+                    return True
+        return False
+
+    def hasPathCore(self, matrix, rows, cols, row, col, flag, path, cur_path):
+        index = row * cols + col
+        if row < 0 or col < 0 or row >= rows or col >= cols or \
+                matrix[index] != path[cur_path] or flag[index] == 1:
+            return False
+        if cur_path == len(path) - 1:
+            return True
+        flag[index] = 1
+        if self.hasPathCore(matrix, rows, cols, row - 1, col, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row + 1, col, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row, col - 1, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row, col + 1, flag, path, cur_path + 1):
+            return True
+        flag[index] = 0
+        return False
+
+
+if __name__ == '__main__':
+    matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS"
+    rows = 5
+    cols = 8
+    path = "SLHECCEIDEJFGGFIE"
+    print(Solution().hasPath(matrix, rows, cols, path))
+```
+
