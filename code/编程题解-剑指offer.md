@@ -393,3 +393,54 @@ if __name__ == '__main__':
     print(Solution().hasPath(matrix, rows, cols, path))
 ```
 
+# 机器人的运动范围
+
+仍然是回溯法， 有一个地方要注意，python中将list作为函数参数时，是形式引用，所以代码中的flag在全局是共享的。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def movingCount(self, threshold, rows, cols):
+        # write code here
+        if rows == 0 and cols == 0:
+            return 0
+        flag = list()
+        for i in range(cols * rows):
+            flag.append(0)
+
+        count = self.movingCountCore(threshold, rows, cols, 0, 0, flag)
+        return count
+
+    def movingCountCore(self, threshold, rows, cols, row, col, flag):
+        index = row * cols + col
+        if row < 0 or col < 0 or row >= rows or col >= cols or \
+                flag[index] == 1 or not self.check(threshold, row, col):
+            return 0
+        flag[index] = 1
+		    
+        # flag是共享的
+        return 1 + self.movingCountCore(threshold, rows, cols, row - 1, col, flag) + \
+               self.movingCountCore(threshold, rows, cols, row + 1, col, flag) + \
+               self.movingCountCore(threshold, rows, cols, row, col - 1, flag) + \
+               self.movingCountCore(threshold, rows, cols, row, col + 1, flag)
+
+    def check(self, threshold, row, col):
+        """ 检查当前点是否合规"""
+        sum_ = 0
+        while row % 10 != row:
+            sum_ += row % 10
+            row = int(row / 10)
+        sum_ += row
+        while col % 10 != col:
+            sum_ += col % 10
+            col = int(col / 10)
+        sum_ += col
+        if sum_ > threshold:
+            return False
+        else:
+            return True
+
+if __name__ == '__main__':
+    print(Solution().movingCount(5, 10, 10))
+```
+
