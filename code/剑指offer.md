@@ -39,7 +39,7 @@ print(find_dupplicat_number([2, 3, 1, 0, 5, 3]))
 
 解法2：不能修改原数组，那么可以复制一个数组，然后在那个数组上利用题目一的解法2，但是时间复杂度O(n)，空间复杂度O(n)。
 
-解法3：这道题和上一道题的区别在于**一定范围内数字的个数不够**。所以可以利用类似二分查找的方法做。
+解法3：这道题和上一道题的区别在于**一定范围内数字的个数不够**。所以可以利用类似二分查找的方法做。时间复杂度为O(nlog(n))，空间复杂度为O(1)。
 
 ```python
 def find_dupplicat_number(arr):
@@ -63,7 +63,38 @@ def find_dupplicat_number(arr):
 print(find_dupplicat_number([2,3,5,4,3,2,6,7]))
 ```
 
+# 二维数组中的查找
 
+>在一个二维数组中，每一行都按照从左到右递增的顺序，每一列都按照从上到下递增的顺序。请完成这样一个函数，输入这样一个二维数组和一个整数，判断数组中是否含有该整数。
+
+解法：讲num和arr的右上角的数字比较，如果num更小，那么最右边那一列就不考虑了；如果num更大，那么就在最右边那一列寻找。比较num和右下角的数字，如果num更大，那么数组中不存在num这个数字；如果num小于等于右下角的数字，那么就遍历最右边那一列的数字，找不到就不存在，否则就存在。
+
+```python
+import numpy as np
+def find(arr, num):
+    """
+    arr是numpy的数组
+    """
+    m, n = arr.shape
+    print(m, n)
+    
+    while(num < arr[0, n-1]):
+        n -= 1
+        print(n)
+    if num > arr[m-1, n-1]:
+        print("num {} is not in arr".format(num))
+        return 0
+    else:
+        for value in arr[0:-1, n-1]:
+            if value == num:
+                print("num {} is in arr".format(num))
+                return 1
+        print("num {} is not in arr".format(num))
+        return 0
+
+arr = np.array([[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]])
+find(arr, 8)
+```
 
 
 # 斐波那契数列(Fibonacci) 
