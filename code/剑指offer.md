@@ -96,6 +96,92 @@ arr = np.array([[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]])
 find(arr, 8)
 ```
 
+# 面试题3：替换空格
+>请实现一个函数，把字符串中的每个空格替换成"%20"。例如，输入"We are happy."，则输出"We%20are%20happy."。
+
+思考：原来1个字符，替换之后变为3个，字符串会边长。如果是在原来的字符串上替换，那么会覆盖掉空格后面的内存；如果创建新的字符串进行替换，那么我们需要足够的内存。这一点可以和面试官交流，问清楚内存是否足够。假设面试官让我们在原来的字符串上进行修改，并保证输入字符串后面有足够的内存。
+
+解法1：从头到尾扫描字符串，每次碰到空格进行替换。时间复杂度O(n2)，不足以拿到offer。
+
+解法2：先遍历一遍字符串，找到空格个数，然后得到最终字符串的长度（原字符串长度+两倍的空格数）。然后用两个指针p1, p2分别指向原字符串的末尾和替换后字符串的末尾。然后p1从后往前遍历，遇到不是空格的字符就复制到p2对应的位置，然后p1, p2同事往前走一步（减1）；如果p1遇到空格，那么就把%20插入到p2之前，然后p2向前移动3格，p1移动1格。**关键在于：从后往前**。时间复杂度O(n)。
+
+```python
+def replace_blank(string):
+    """
+    python中字符串不能更改，因此这里转换为数组进行处理
+    """
+    string = list(map(str, string))
+    if string is None:
+        return
+    
+    original_length = len(string)
+    blank_number =0
+    for i in string:
+        if i == " ":
+            blank_number += 1
+    new_length = original_length + 2 * blank_number
+
+    for i in range(2 * blank_number):
+        string.append(0)
+
+    p1 = original_length - 1
+    p2 = new_length - 1
+
+    while p1 != p2:
+        if string[p1] != " ":
+            string[p2] = string[p1]
+            p1 -= 1
+            p2 -= 1
+        else:
+            string[p2] = "0"
+            string[p2 - 1] = "2"
+            string[p2 - 2] = "%"
+            p1 -= 1
+            p2 -= 3
+    return "".join(string)
+
+print(replace_blank("Good moning"))
+```
+
+## 相关题目
+>有两个排序的数组A1和A2，内存在A1的末尾有足够的空余空间容纳A2。请实现这样一个函数，把A2中的所有数字插入到A1中，并且所有的数字是排序的。
+
+思考：假设这里的排序是从小到大。和前面的题一样，直观的思维是从前往后比较，然后插入，但是这样就会出现一个元素复制多次的情况。更好的方法是从尾到头比较两个数组中的数字，然后把较大的数字复制到A1中的合适位置。
+
+```python
+def test(A1, A2):
+    """
+    A1 and A2 both are sorted arrays, 
+    combine A2 into A1 and the new array 
+    should be sorted.
+    """
+
+    length_1 = len(A1)
+    length_2 = len(A2)
+    new_length = length_1 + length_2
+    for i in range(length_2):
+        A1.append(' ')
+    
+    p = new_length - 1
+    p1 = length_1 - 1
+    p2 = length_2 - 1
+
+    while p1 >= 0 and p2 >= 0:
+        if A1[p1] > A2[p2]:
+            A1[p] = A1[p1]
+            p -= 1
+            p1 -= 1
+            print(A1)
+        else:
+            A1[p] = A2[p2]
+            p -= 1
+            p2 -= 1
+            print(A1)
+    return A1
+
+print(test([1,2,3,4,5], [2,4,6]))
+```
+
 
 # 斐波那契数列(Fibonacci) 
 
