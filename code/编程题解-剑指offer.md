@@ -444,3 +444,38 @@ if __name__ == '__main__':
     print(Solution().movingCount(5, 10, 10))
 ```
 
+# 删除链表中的重复结点
+
+这里删除重复结点不是说把重复部分删掉就行了，而是只要重复就全删了。例如【1，2，2，3】删除后是【1，3】而不是【1，2，3】，做法是要另外设一个Head结点，先让它指向真实头结点。然后设pre=Head， pre的含义是当前不重复部分的最后一个结点，然后设一个工作指针p，当p和p.next值相等时，则要一直向后遍历，找到下一个不重复的数字，然后让pre指向它。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    def deleteDuplication(self, pHead):
+        # write code here
+        if not pHead:
+            return None
+        if pHead.next is None:
+            return pHead
+        Head = ListNode(0)
+        Head.next = pHead
+        pre = Head
+        p = pHead
+        while p:
+            if p.next and p.val == p.next.val:
+                while p.next and p.val == p.next.val:
+                    p = p.next
+                pre.next = p.next
+                p = p.next
+            else:
+                pre = p
+                p = p.next
+        return Head.next
+```
+
+
+
