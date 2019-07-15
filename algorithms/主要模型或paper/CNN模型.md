@@ -28,7 +28,7 @@ Inception v1中的inception模块在一层里使用1x1, 3x3, 5x5的卷积和3x3�
 
 Inception V1有22层深，处理最后一层的输出，中间节点的输出分类效果也很好。因此**在Inception V1中还用到了辅助分类节点：将中间某一层的输出用作分类，并按一个较小的权重（0.3）加载到最终的分类结果中，相当于模型融合**。
 
-![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v1_fig2.png)
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/inception_v1_fig3.png) 
 
 ## Inception v2
 
@@ -36,7 +36,7 @@ Inception v2改进点：
 - 加入了BN层，减少了internal covariate shift（内部神经元的数据分布变化），使每一层的输出都规范化到一个N(0,1)的高斯分布；
 - 参考VGG用2个3x3代替inception模块中的5x5，既降低了参数量，也加速计算
 
-![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v2.png)
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/inception_v2.png) 
 
 ## Inception v3
 
