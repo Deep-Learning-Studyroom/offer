@@ -1,16 +1,46 @@
 # [CNN网络结构的发展：从LeNet到EfficientNet](https://mp.weixin.qq.com/s?__biz=MzUxNjcxMjQxNg==&mid=2247489858&idx=1&sn=e4411a314f3001e490cc8933363f37eb&chksm=f9a26bcdced5e2dbc74905ef207f93b7956548e7cb5e22ad843b689a7d2262ed696841d41aca&mpshare=1&scene=1&srcid=&key=4af267131119af88c83424eff678b3d5ae9197400302caa936d4eb44d2184ecf9a676d808ae82f1dcbd0d5b31fd319d6a0f9e554c84693db43bbfe28fe8c265dfa5154e58856c0d213f8f84e7c6e3ea5&ascene=1&uin=MTg4MTg1MDQ4NA%3D%3D&devicetype=Windows+10&version=62060833&lang=zh_CN&pass_ticket=T8aYnQfOGRsIfF8maeg%2FlzAkaeuBj1l8KxDdqP7LgcVemVi34vr%2FTn1mSa6M%2B5gU)
 
-# 标准卷积的计算
+# 卷积相关的计算
+## 标准卷积的计算
 
 假设输入的图片为[c, h, w]，其中c，h，w分别代表通道数，高和宽。用h_out，w_out，c_out代表输出图片的高、宽、通道。k代表卷积核尺寸，卷积核的数量就是c_out。
 
 $$h_{out} = \frac{h + 2p - k}{s} + 1$$
 
-# 空洞卷积卷积核的实际大小
+## 空洞卷积卷积核的实际大小
 一个标准卷积核，尺寸为k，空洞系数是d，那么实际卷积核大小为：
 
 $$k' = k + (k - 1) * (d - 1) = d * (k - 1) + 1$$
 
-# 因此空洞卷积输出图片的尺寸为
+## 因此空洞卷积输出图片的尺寸为
 
 $$h_{out} = \frac{h + 2p - k'}{s} + 1 = \frac{h + 2p - d(k - 1) - 1}{s} + 1$$
+
+# Inception v1--v4
+
+## Inception v1
+
+Inception v1中的inception模块在一层里使用1x1, 3x3, 5x5的卷积和3x3的maxpooling，然后concatenate一起，好处是**（1）增加网络宽度，提高特征表达能力；（2）增加了网络对尺度的适应能力，相当于一种多尺度方法**。
+
+![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v1_fig2.png)
+
+上图中的(b)增加了1x1卷积，减少网络的参数量。
+
+
+## Inception v2
+
+Inception v2改进点：
+- 加入了BN层，减少了internal covariate shift（内部神经元的数据分布变化），使每一层的输出都规范化到一个N(0,1)的高斯分布；
+- 参考VGG用2个3x3代替inception模块中的5x5，既降低了参数量，也加速计算
+
+![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v2.png)
+
+## Inception v3
+
+v3的主要改进点是**分解（Factorization）**，将7x7分解成两个一维的卷积(1x7, 7x1)，3x3同样(1x3, 3x1)。**好处：减少参数，加速计算(多余的计算力可以用来加深网络)；把一个卷积拆成两个卷积，使得网络深度进一步增加，增加了网络的非线性表达能力。**另外，把输入从224x224变为299x299。
+
+## Inception v4
+
+Inception v4主要研究把inception模块结合残差结构的效果，发现残差结构可以****极大地加速训练，同时性能也有提升**，得到一个inception-resnet-v2网络和一个更深更优化的inception v4模型。
+
+
