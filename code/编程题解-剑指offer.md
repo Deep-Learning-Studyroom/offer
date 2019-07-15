@@ -347,3 +347,135 @@ class Solution:
         return rotateArray[p2]
 ```
 
+# 矩阵中的路径
+
+回溯法
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def hasPath(self, matrix, rows, cols, path):
+        # write code here
+        cur_path = 0
+        path = list(path)
+        matrix = list(matrix)
+        flag = []
+        for _ in range(rows * cols):
+            flag.append(0)
+        for row in range(rows):
+            for col in range(cols):
+                if self.hasPathCore(matrix, rows, cols, row, col, flag, path, cur_path):
+                    return True
+        return False
+
+    def hasPathCore(self, matrix, rows, cols, row, col, flag, path, cur_path):
+        index = row * cols + col
+        if row < 0 or col < 0 or row >= rows or col >= cols or \
+                matrix[index] != path[cur_path] or flag[index] == 1:
+            return False
+        if cur_path == len(path) - 1:
+            return True
+        flag[index] = 1
+        if self.hasPathCore(matrix, rows, cols, row - 1, col, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row + 1, col, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row, col - 1, flag, path, cur_path + 1) or \
+           self.hasPathCore(matrix, rows, cols, row, col + 1, flag, path, cur_path + 1):
+            return True
+        flag[index] = 0
+        return False
+
+
+if __name__ == '__main__':
+    matrix = "ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS"
+    rows = 5
+    cols = 8
+    path = "SLHECCEIDEJFGGFIE"
+    print(Solution().hasPath(matrix, rows, cols, path))
+```
+
+# 机器人的运动范围
+
+仍然是回溯法， 有一个地方要注意，python中将list作为函数参数时，是形式引用，所以代码中的flag在全局是共享的。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def movingCount(self, threshold, rows, cols):
+        # write code here
+        if rows == 0 and cols == 0:
+            return 0
+        flag = list()
+        for i in range(cols * rows):
+            flag.append(0)
+
+        count = self.movingCountCore(threshold, rows, cols, 0, 0, flag)
+        return count
+
+    def movingCountCore(self, threshold, rows, cols, row, col, flag):
+        index = row * cols + col
+        if row < 0 or col < 0 or row >= rows or col >= cols or \
+                flag[index] == 1 or not self.check(threshold, row, col):
+            return 0
+        flag[index] = 1
+		    
+        # flag是共享的
+        return 1 + self.movingCountCore(threshold, rows, cols, row - 1, col, flag) + \
+               self.movingCountCore(threshold, rows, cols, row + 1, col, flag) + \
+               self.movingCountCore(threshold, rows, cols, row, col - 1, flag) + \
+               self.movingCountCore(threshold, rows, cols, row, col + 1, flag)
+
+    def check(self, threshold, row, col):
+        """ 检查当前点是否合规"""
+        sum_ = 0
+        while row % 10 != row:
+            sum_ += row % 10
+            row = int(row / 10)
+        sum_ += row
+        while col % 10 != col:
+            sum_ += col % 10
+            col = int(col / 10)
+        sum_ += col
+        if sum_ > threshold:
+            return False
+        else:
+            return True
+
+if __name__ == '__main__':
+    print(Solution().movingCount(5, 10, 10))
+```
+
+# 删除链表中的重复结点
+
+这里删除重复结点不是说把重复部分删掉就行了，而是只要重复就全删了。例如【1，2，2，3】删除后是【1，3】而不是【1，2，3】，做法是要另外设一个Head结点，先让它指向真实头结点。然后设pre=Head， pre的含义是当前不重复部分的最后一个结点，然后设一个工作指针p，当p和p.next值相等时，则要一直向后遍历，找到下一个不重复的数字，然后让pre指向它。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    def deleteDuplication(self, pHead):
+        # write code here
+        if not pHead:
+            return None
+        if pHead.next is None:
+            return pHead
+        Head = ListNode(0)
+        Head.next = pHead
+        pre = Head
+        p = pHead
+        while p:
+            if p.next and p.val == p.next.val:
+                while p.next and p.val == p.next.val:
+                    p = p.next
+                pre.next = p.next
+                p = p.next
+            else:
+                pre = p
+                p = p.next
+        return Head.next
+```
+
+
+

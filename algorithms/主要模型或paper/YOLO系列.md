@@ -34,6 +34,33 @@
 
 Yolo 9000的训练细节我没有弄清楚，总之它的大思想就是用ImageNet来帮助检测的识别部分。 将COCO和ImageNet合并，如果训练时是COCO数据，那么就对整个Yolo的loss进行训练，如果是ImageNet数据，那么就只训练分类分支。
 
+
+
+# Yolo V3
+
+Yolo v3也是直接地指出做了哪些改进。精度上其实它比two-stage的差一截，但确实很快。
+
+改进：
+
+1. 对每个boundingbox的置信度和类别预测使用逻辑回归，目的是为了满足多标签的分类任务。
+2. 引入了多尺度策略，这应该算是yolo3的一个大的改进。yolo3在三张feature map上进行预测：
+
+- 普通的网络最后一层feature map
+- 用最后一层的头两层feature map上采样，然后和更浅层的feature map进行concat操作，接着用卷积来降采样到和最后一层feature map一样的尺寸。
+- 用第二步的方法类似地再做一次，但具体是对第几层做的没有说明，需要看源码。
+- 总之这种方法带入了多尺度信息，加强了yolo检测小目标的能力。
+
+Things they did that didn't work:
+
+1. 使用box宽、高乘积的线性激活方式来预测box的x、y坐标，影响了模型的稳定性。
+2. 用线性回归代替逻辑回归，使模型mAP下降了数个点。
+3. 加入focal loss，使mAP下降了两个点。可能是因为Focal loss主要是惩罚分类中的FP的，而yolo中已经将class预测和object的confidence预测解耦了，所以focal loss就无法发挥了。
+4. 像faster r-cnn一样取了两个阈值来选框，0.7和0.3。 大于0.7为positive，小于0.3为negative，中间的不管，效果不佳。
+
+总之，这些常识说明，大多数的tricks往往有其特殊的应用场景，并且发挥作用还是需要经过耐心地fine-tuning
+
+
+
 ​     
 
 ​     
