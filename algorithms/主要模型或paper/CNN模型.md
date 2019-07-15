@@ -24,8 +24,11 @@ Inception v1中的inception模块在一层里使用1x1, 3x3, 5x5的卷积和3x3�
 
 ![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v1_fig2.png)
 
-上图中的(b)增加了1x1卷积，减少网络的参数量。
+上图中的(b)增加了1x1卷积，减少网络的参数量。**1x1的卷积是一个非常有用的结构，可以跨通道组织信息，提高网络的表达能力，还可以进行输出通道的升维和降维。**
 
+Inception V1有22层深，处理最后一层的输出，中间节点的输出分类效果也很好。因此**在Inception V1中还用到了辅助分类节点：将中间某一层的输出用作分类，并按一个较小的权重（0.3）加载到最终的分类结果中，相当于模型融合**。
+
+![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v1_fig2.png)
 
 ## Inception v2
 
