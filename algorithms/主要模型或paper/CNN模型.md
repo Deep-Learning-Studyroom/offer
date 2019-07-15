@@ -20,9 +20,9 @@ $$h_{out} = \frac{h + 2p - k'}{s} + 1 = \frac{h + 2p - d(k - 1) - 1}{s} + 1$$
 
 ## Inception v1
 
-Inception v1中的inception模块在一层里使用1x1, 3x3, 5x5的卷积和3x3的maxpooling，然后concatenate一起，好处是**（1）增加网络宽度，提高特征表达能力；（2）增加了网络对尺度的适应能力，相当于一种多尺度方法**。
+Inception v1中的inception模块在一层里使用1x1, 3x3, 5x5的卷积和3x3的maxpooling，然后concatenate一起，好处是**1)增加网络宽度，提高特征表达能力；2)增加了网络对尺度的适应能力，相当于一种多尺度方法**。
 
-![](https://github.com/Deep-Learning-Studyroom/offer/tree/master/pictures/inception_v1_fig2.png)
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/inception_v1_fig2.png) 
 
 上图中的(b)增加了1x1卷积，减少网络的参数量。**1x1的卷积是一个非常有用的结构，可以跨通道组织信息，提高网络的表达能力，还可以进行输出通道的升维和降维。**
 
