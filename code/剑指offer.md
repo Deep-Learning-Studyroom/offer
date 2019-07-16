@@ -515,7 +515,7 @@ class Solution:
 
 
 
-# 斐波那契数列(Fibonacci) 
+# 面试题10：斐波那契数列(Fibonacci) 
 
 解法1：递归。指数级的时间复杂度，面试官不会喜欢。
 
@@ -571,6 +571,176 @@ def findkth(num, low, high, k): # #找到数组里第k大的数，从0开始
         return findkth(num, low, index-1, k)
 ```
 
+# 面试题32：从上到下打印二叉树
+
+**题目一：不分行从上到下打印二叉树**
+
+>从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+解法：二叉树的层次遍历，利用队列
+
+**题目二：分行从上到下打印二叉树**
+
+解法：添加两个值，分别用来记录当前层待打印的节点数量和下一层的节点数量
+
+**题目三：之字形打印二叉树**
+
+解法：在分行打印的基础上修改，添加一个记录的列表all和一个层数level_num，列表中的第n个元素是第n层(这里层数也从0开始)节点从左到右组成的列表。分行打印算法中打印的地方改为想列表all的对应元素中append元素。打印的时候偶数层的列表逆序一下再打印即可。同时要注意打印换行。
+
+代码：
+
+```python
+class Node(object):
+    """
+    节点类
+    """
+    def __init__(self, elem=-1, lchild=None, rchild=None):
+        self.elem = elem
+        self.lchild = lchild
+        self.rchild = rchild
+
+class Tree(object):
+    """
+    树类
+    """
+    def __init__(self):
+        self.root = Node()
+        self.myQueue = []
+
+    def add(self, elem):
+        """
+        为树添加节点
+        """
+        node = Node(elem)
+
+        if self.root.elem == -1:            # 如果树是空的，则对根节点幅值
+            self.root = node
+            self.myQueue.append(self.root)
+
+        else:
+            treeNode = self.myQueue[0]      # 此节点的子树还没有齐
+            if treeNode.lchild == None:
+                treeNode.lchild = node
+                self.myQueue.append(treeNode.lchild)
+            else:
+                treeNode.rchild = node
+                self.myQueue.append(treeNode.rchild)
+                self.myQueue.pop(0)         # 如果该节点存在左右子树，将此节点丢弃
+
+    def print_binary_tree(self):
+        """不分行从上到下打印二叉树"""
+        if self.root is None:
+            return None
+
+        my_queue = []
+        node = self.root
+        my_queue.append(node)
+
+        while my_queue:
+            node = my_queue.pop(0)
+            print(node.elem, end=" ")
+            if node.lchild is not None:
+                my_queue.append(node.lchild)
+            if node.rchild is not None:
+                my_queue.append(node.rchild)
+
+    def print_binary_tree2(self):
+        """分行从上到下打印二叉树，需要额外另个量来记录本层待打印的节点数量以及下一层的节点数量"""
+        if self.root is None:
+            return None
+
+        my_queue = []
+        node = self.root
+        my_queue.append(node)
+        to_be_printed = 1
+        next_level_num = 0
+
+        while my_queue:
+            node = my_queue.pop(0)
+            if to_be_printed > 0:
+                print(node.elem, end=" ")
+                to_be_printed -= 1
+            else:
+                print()
+                to_be_printed = next_level_num
+                next_level_num = 0
+                print(node.elem, end=" ")
+                to_be_printed -= 1
+
+            if node.lchild is not None:
+                my_queue.append(node.lchild)
+                next_level_num += 1
+            if node.rchild is not None:
+                my_queue.append(node.rchild)
+                next_level_num += 1
+
+    def print_binary_tree3(self):
+        """之字形打印二叉树，在分行打印的基础上添加一个记录本层顺序的值，之前打印的地方换成压到一个列表"""
+        if self.root is None:
+            return None
+
+        my_queue = []
+        node = self.root
+        my_queue.append(node)
+        to_be_printed = 1
+        next_level_num = 0
+        all = [[],]
+        level_num = 0
+
+        while my_queue:
+            node = my_queue.pop(0)
+            if to_be_printed > 0:
+                #print(node.elem, end=" ")
+                all[level_num].append(node.elem)
+                to_be_printed -= 1
+            else:
+                print()
+                to_be_printed = next_level_num
+                next_level_num = 0
+                level_num += 1
+                all.append([])
+                #print(node.elem, end=" ")
+                all[level_num].append(node.elem)
+                to_be_printed -= 1
+
+            if node.lchild is not None:
+                my_queue.append(node.lchild)
+                next_level_num += 1
+            if node.rchild is not None:
+                my_queue.append(node.rchild)
+                next_level_num += 1
+
+        for i in range(len(all)):
+            if i % 2 == 0:
+                for j in all[i]:
+                    print(j, end=" ")
+                if i != len(all) - 1:
+                    print()
+            else:
+                all[i].reverse()
+                for j in all[i]:
+                    print(j, end=" ")
+                if i != len(all) - 1:
+                    print()
+
+
+
+if __name__ == '__main__':
+    """主函数"""
+    elems = range(10)              #生成十个数据作为树节点
+    tree = Tree()                  #新建一个树对象
+    for elem in elems:
+        tree.add(elem)             #逐个添加树的节点
+
+    print('不分行从上到下打印二叉树')
+    tree.print_binary_tree()
+
+    print('分行从上到下打印二叉树')
+    tree.print_binary_tree2()
+
+    print('之字形打印二叉树')
+    tree.print_binary_tree3()
+```
 
 # 面试题39：数组中出现次数超过一半的数字
 
