@@ -63,7 +63,7 @@ def find_dupplicat_number(arr):
 print(find_dupplicat_number([2,3,5,4,3,2,6,7]))
 ```
 
-# 二维数组中的查找
+# 面试题4：二维数组中的查找
 
 >在一个二维数组中，每一行都按照从左到右递增的顺序，每一列都按照从上到下递增的顺序。请完成这样一个函数，输入这样一个二维数组和一个整数，判断数组中是否含有该整数。
 
@@ -96,7 +96,7 @@ arr = np.array([[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]])
 find(arr, 8)
 ```
 
-# 面试题3：替换空格
+# 面试题5：替换空格
 >请实现一个函数，把字符串中的每个空格替换成"%20"。例如，输入"We are happy."，则输出"We%20are%20happy."。
 
 思考：原来1个字符，替换之后变为3个，字符串会边长。如果是在原来的字符串上替换，那么会覆盖掉空格后面的内存；如果创建新的字符串进行替换，那么我们需要足够的内存。这一点可以和面试官交流，问清楚内存是否足够。假设面试官让我们在原来的字符串上进行修改，并保证输入字符串后面有足够的内存。
@@ -181,6 +181,292 @@ def test(A1, A2):
 
 print(test([1,2,3,4,5], [2,4,6]))
 ```
+# 面试题6：从尾到头打印链表
+
+三种方法：栈、列表逆序和递归。基于递归的方法有一个不足：当链表非常长时，就会导致函数调用的层级很深，从而有可能导致函数调用栈溢出。不如前两种的鲁棒性更好。
+
+```python 
+#class ListNode:
+#    def __init__(self, x):
+#        self.val = x
+#        self.next = None
+
+class Solution:
+    """
+    使用列表逆序的方法
+    """
+    def print_list_form_tail_to_head(self, list_node):
+        out = []
+        if list_node is None:
+            return out
+        while list_node.next is not None:
+            out.append(list_node.val)
+            list_node = list_node.next
+        out.append(list_node.val)
+        out.reverse()
+        return out
+
+class Solution:
+    """
+    使用栈的方法
+    """
+    def print_list_form_tail_to_head(self, list_node):
+        out = []
+        if list_node is None:
+            return out
+        while list_node.next is not None:
+            out.append(list_node.val)
+            list_node = list_node.next
+        out.append(list_node.val)
+
+        result = []
+        while len(out) != 0:
+            result.append(out.pop())
+        return out
+
+class Solution:
+    """
+    使用递归的方法
+    """
+    def print_list_form_tail_to_head(self, list_node):
+        out = []
+        if list_node is None:
+            return out
+
+        return self.print_list_form_tail_to_head(list_node.next) + [list_node.val]
+
+```
+
+# 面试题7：重建二叉树
+
+## 二叉树重要基础知识
+
+由于树的操作设计大量指针，因此关于树的面试题大都不容易，也是面试官喜欢考察的点。
+
+**二叉树最重要的操作是遍历，分为先序遍历（根左右）、中序遍历（左根右）和后序遍历（左右根）。每个操作都有递归和堆栈两种实现方法。另外，还有宽度优先遍历（又称为层次遍历），即按照从上到下、每一层内从左到右的顺序遍历。这7个方法必须熟练掌握！**
+
+**遍历**：  
+- 深度优先遍历  
+    - 先序遍历：**递归**或堆栈  
+    - 中序遍历：**递归**或堆栈  
+    - 后序遍历：**递归**或堆栈  
+- 广度优先遍历  
+    - 层次遍历：**队列**  
+    
+二叉树的特例：  
+    - 二叉搜索树：查找的时间复杂度O(logn)。参考面试题36“二叉搜索树与双向链表”和面试题68“树中两个节点的最低公共祖先”。  
+    - 堆：最大堆、最小堆。参考面试题40“最小的k个数”。  
+    - 红黑树：树的节点有红黑两种颜色，并且从根节点到叶节点的最长路径不超过最短路径的两倍。参考面试题40“最小的k个数”。  
+
+
+ ```python
+class Node(object):
+    """
+    节点类
+    """
+    def __init__(self, elem=-1, lchild=None, rchild=None):
+        self.elem = elem
+        self.lchild = lchild
+        self.rchild = rchild
+
+class Tree(object):
+    """
+    树类
+    """
+    def __init__(self):
+        self.root = Node()
+        self.myQueue = []
+
+    def add(self, elem):
+        """
+        为树添加节点
+        """
+        node = Node(elem)
+
+        if self.root.elem == -1:            # 如果树是空的，则对根节点幅值
+            self.root = node
+            self.myQueue.append(self.root)
+
+        else:
+            treeNode = self.myQueue[0]      # 此节点的子树还没有齐
+            if treeNode.lchild == None:
+                treeNode.lchild = node
+                self.myQueue.append(treeNode.lchild)
+            else:
+                treeNode.rchild = node
+                self.myQueue.append(treeNode.rchild)
+                self.myQueue.pop(0)         # 如果该节点存在左右子树，将此节点丢弃
+
+    def front_recursive(self,root):
+        """
+        利用递归实现前序遍历（根左右）
+        """
+        if root is None:
+            return
+        print(root.elem)
+        self.front_recursive(root.lchild)
+        self.front_recursive(root.rchild)
+
+    def middle_recursive(self, root):
+        """
+        利用递归实现中序遍历(左根右)
+        """
+        if root is None:
+            return
+        self.middle_recursive(root.lchild)
+        print(root.elem)
+        self.middle_recursive(root.rchild)
+
+    def later_recursive(self, root):
+        """"
+        利用递归实现后序遍历（左右根）
+        """
+        if root is None:
+            return
+        self.later_recursive(root.lchild)
+        self.later_recursive(root.rchild)
+        print(root.elem)
+
+    def front_stack(self, root):
+        """利用堆栈实现树的先序遍历"""
+        if root is None:
+            return
+        my_stack = []
+        node = root
+        while node or my_stack:
+            while node:                  # 从根节点开始，一直找它的左子树
+                print(node.elem)
+                my_stack.append(node)
+                node = node.lchild
+            node = my_stack.pop()        # while结束表示当前节点node为空，即前一个节点没有左子树了
+            node = node.rchild           # 开始查看它的右子树
+
+    def middle_stack(self, root):
+        """利用堆栈实现树的中序遍历"""
+        if root is None:
+            return
+        my_stack = []
+        node = root
+        while node or my_stack:
+            while node:                         # 从根节点开始，一直找它的左子树
+                my_stack.append(node)
+                node = node.lchild
+            node = my_stack.pop()               #  while结束表示当前节点node为空，即前一个节点没有左子树了
+            print(node.elem)
+            node = node.rchild                  # 开始查看它的右子树
+
+    def later_stack(self, root):
+        """利用堆栈实现树的后序遍历"""
+        if root is None:
+            return
+
+        my_stack1 = []
+        my_stack2 = []
+        node = root
+        my_stack1.append(node)
+        while my_stack1:                         # 这个while循环的功能是找出后序遍历的逆序，存在my_stack2里面
+            node = my_stack1.pop()
+            if node.lchild:
+                my_stack1.append(node.lchild)
+            if node.rchild:
+                my_stack1.append(node.rchild)
+            my_stack2.append(node)
+        while my_stack2:                         # 将my_stack2中的元素出栈，即为后序遍历的顺序
+            print(my_stack2.pop().elem)
+
+    def level_queue(self, root):
+        """利用队列实现树的层次遍历"""
+        if root is None:
+            return
+        my_queue = []
+        node = root
+        my_queue.append(node)
+
+        while my_queue:
+            node = my_queue.pop(0)
+            print(node.elem)
+            if node.lchild != None:
+                my_queue.append(node.lchild)
+            if node.rchild != None:
+                my_queue.append(node.rchild)
+
+if __name__ == '__main__':
+    """主函数"""
+    elems = range(10)           #生成十个数据作为树节点
+    tree = Tree()          #新建一个树对象
+    for elem in elems:
+        tree.add(elem)           #逐个添加树的节点
+
+    print('队列实现层次遍历:')
+    tree.level_queue(tree.root)
+
+    print('\n\n递归实现先序遍历:')
+    tree.front_recursive(tree.root)
+    print('\n\n堆栈实现先序遍历:')
+    tree.front_stack(tree.root)
+
+    print('\n递归实现中序遍历:')
+    tree.middle_recursive(tree.root)
+    print('\n堆栈实现中序遍历:')
+    tree.middle_stack(tree.root)
+
+    print('\n递归实现后序遍历:')
+    tree.later_recursive(tree.root)
+    print('\n堆栈实现后序遍历:')
+    tree.later_stack(tree.root)
+```   
+
+## 重建二叉树题目和解法
+
+>输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如，输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建如下图所示的二叉树并输出它的头节点。
+
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/reconstruct_binary_tree.PNG) 
+
+解法：如图所示，前序遍历的第一个数字1是根节点的值，然后去中序遍历序列中找到1的位置，1之前的是左子树的中序遍历序列（节点数为3），之后的是右子树的中序遍历序列（节点数为4）。然后根据左子树的节点数和右子树的节点数可以在前序遍历序列中找到左子树的前序遍历序列和右子树的前序遍历序列。**这样在两个序列中找到了左右子树对应的前序遍历序列和中序遍历序列。**
+接下来可以用**递归**的方法做。
+
+```python
+
+# -*- coding:utf-8 -*-
+'''
+重建二叉树
+题目描述
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+'''
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+class Solution:
+    # 返回构造的TreeNode根节点
+    def reConstructBinaryTree(self, pre, tin):
+        # write code here
+        if len(pre) == 0:
+            return None
+        if len(pre) == 1:
+            return TreeNode(pre[0])
+        else:
+            # 每棵子树的根节点肯定是pre子数组的首元素，所以每次新建一个子树的根节点
+            res = TreeNode(pre[0])
+            res.left = self.reConstructBinaryTree(pre[1: tin.index(pre[0]) + 1], tin[: tin.index(pre[0])])
+            res.right = self.reConstructBinaryTree(pre[tin.index(pre[0]) + 1: ], tin[tin.index(pre[0]) + 1: ])
+        return res
+```
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 斐波那契数列(Fibonacci) 
