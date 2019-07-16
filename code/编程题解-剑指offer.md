@@ -479,3 +479,35 @@ class Solution:
 
 
 
+# 正则表达式匹配
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s, pattern都是字符串
+    def match(self, s, pattern):
+        # write code here
+        if not s or not pattern:
+            return False
+        si = 0
+        pi = 0
+        return self.matchCore(s, pattern, si, pi)
+
+    def matchCore(self, s, pattern, si, pi):
+        if si == len(s) and pi == len(pattern):
+            return True
+        if si < len(s) and pi == len(pattern):
+            return False
+        if pi < len(pattern) - 1 and pattern[pi + 1] == "*":
+            if (si < len(s) and s[si] == pattern[pi]) or (si < len(s) and pattern[pi] == "."):
+                return self.matchCore(s, pattern, si + 1, pi) or \
+                       self.matchCore(s, pattern, si + 1, pi + 2) or \
+                       self.matchCore(s, pattern, si, pi + 2)
+            else:
+                return self.matchCore(s, pattern, si, pi + 2)
+        elif (si < len(s) and s[si] == pattern[pi]) or (pattern[pi] == "." and si < len(s)):
+            return self.matchCore(s, pattern, si + 1, pi + 1)
+        else:
+            return False
+```
+
