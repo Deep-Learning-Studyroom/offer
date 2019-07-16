@@ -246,11 +246,11 @@ class Solution:
 **二叉树最重要的操作是遍历，分为先序遍历（根左右）、中序遍历（左根右）和后序遍历（左右根）。每个操作都有递归和堆栈两种实现方法。另外，还有宽度优先遍历（又称为层次遍历），即按照从上到下、每一层内从左到右的顺序遍历。这7个方法必须熟练掌握！**
 
 **遍历**：  
-- 深度优先遍历  
+- 深度优先遍历:  
     - 先序遍历：**递归**或堆栈  
     - 中序遍历：**递归**或堆栈  
     - 后序遍历：**递归**或堆栈  
-- 广度优先遍历  
+- 广度优先遍历:  
     - 层次遍历：**队列**  
     
 二叉树的特例：  
@@ -455,7 +455,53 @@ class Solution:
         return res
 ```
 
-    
+# 面试题8：二叉树的下一个节点
+
+>给定一颗二叉树和其中的一个节点，如何找出中序遍历序列的下一个节点？树中的节点除了有两个分别指向左、右子节点的指针，还有一个指向父节点的指针。
+
+解法：  
+- 如果一个节点有右子树，那么它的下一个节点就是**其右子树的最左节点**。  
+- 如果一个节点没有右子树，并且它是其父节点的左子节点，那么它的下一个节点就是**其父节点**。    
+- 如果一个节点没有右子树，并且它是其父节点的右子节点，那么**沿着指向父节点的指针一直向上遍历，直到找到一个是它父节点的左子节点的节点。如果这个节点存在，那么这个节点的父节点就是我们要找的下一个节点；如果这个节点不存在，那么该节点没有下一个节点**
+
+```python
+class BinaryTreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
+class Solution:
+    def __init__(self, binary_tree, node):
+        self.binary_tree = binary_tree
+        self.node = node
+
+    def find_next(self):
+        if self.binary_tree is None:
+            return None
+
+        # 存在右子树
+        if self.node.right is not None:
+            next_node = self.node.right
+            while next_node.left is not None:
+                next_node = next_node.left
+            return next_node
+
+        else:
+            # 沿着指向父节点的指针一直向上遍历，直到找到一个是它父节点的左子节点的节点。
+            # 如果这个节点存在，那么这个节点的父节点就是我们要找的下一个节点，否则返回None
+            # 如果是父节点的左子节点
+            if self.node.parent.left == self.node:
+                return self.node.parent
+            # 如果是父节点的右子节点
+            else:
+                next_node = self.node.parent
+                while next_node is not None:
+                    if next_node.parent.left == next_node:
+                        return next_node.parent
+                    next_node = next_node.parent
+                return None
+```
 
 
 
