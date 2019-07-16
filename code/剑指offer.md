@@ -742,6 +742,45 @@ if __name__ == '__main__':
     tree.print_binary_tree3()
 ```
 
+
+# 面试题33：二叉搜索树的后序遍历序列
+
+>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回true，否则返回false。假设输入的数组的任意两个数字都互不相同。
+
+解法：
+
+```python
+class Solution:
+    def VerifySquenceOfBST(self, sequence):
+        # write code here
+        if not sequence:
+            return False
+        length = len(sequence)
+        # BST后序遍历的最后一个值是root
+        root = sequence[-1]
+        indexRight = 0
+        for i in range(0, length - 1):
+            if sequence[i] > root:
+                break
+            indexRight += 1
+        for j in range(indexRight + 1, length - 1):
+            if sequence[j] < root:
+                return False
+        # 递归检查左子树是否可以为BST
+        left = True
+        if indexRight > 1:
+            left = self.VerifySquenceOfBST(sequence[:indexRight])
+        
+        # 递归检查右子树是否可以为BST
+        right = True
+        if indexRight < length - 1:
+            right = self.VerifySquenceOfBST(sequence[indexRight:length - 1])
+         
+        return left and right
+```
+
+
+
 # 面试题39：数组中出现次数超过一半的数字
 
 题目：数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。  
