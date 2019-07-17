@@ -503,8 +503,30 @@ class Solution:
                 return None
 ```
 
+# 面试题9：用两个栈实现队列
+
+>用两个栈实现队列。实现队列的两个功能，push（队列尾部插入节点）和pop（队列头部删除节点）。
+
+解法：两个栈，stack1和stack2.每次push的时候都从stack1 append即可，每次pop时如果stack2有元素，就从stack2 pop；如果stack2没有元素，那么就把stack1的所有元素逆序append进stack2，然后stack2 pop即可。
 
 
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def __init__(self):
+        self.stack1 = []
+        self.stack2 = []
+    def push(self, node):
+        # write code here
+        self.stack1.append(node)
+    def pop(self):
+        if self.stack2:
+            return self.stack2.pop()
+        else:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+            return self.stack2.pop()
+```
 
 
 
