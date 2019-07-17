@@ -529,15 +529,9 @@ class Solution:
 ```
 
 
-
-
-
-
-
-
-
-
 # 面试题10：斐波那契数列(Fibonacci) 
+
+## 斐波那契数列
 
 解法1：递归。指数级的时间复杂度，面试官不会喜欢。
 
@@ -567,6 +561,14 @@ def fibo(n):
 ```
 解法3：矩阵相乘法，时间复杂度O(log(n))  
 
+## 补充题：青蛙跳台阶
+
+>一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个n级台阶总共有多少总做法。
+
+解法：第n级台阶的方法数 = 第n-1级台阶的方法数 + 第n-2级台阶的方法数，所以就是斐波那契数列
+
+>拓展：把青蛙跳的方式改为，既可以跳上1级台阶，也可以跳上2级台阶，也可以跳上n级台阶，那么跳上n级台阶总共有多少总方法？用数学归纳法可以得到，f(n) = 2^(n-1)
+
 
 # 补充题：从无序数组中找到第k大的数
 
@@ -592,6 +594,35 @@ def findkth(num, low, high, k): # #找到数组里第k大的数，从0开始
     else:
         return findkth(num, low, index-1, k)
 ```
+
+# 面试题11：旋转数组的最小数字
+
+>把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的旋转，输出旋转数组的最小元素。例如，数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，最小的元素为1.
+
+解法：二分查找。定义start和end是数组第一个和最后一个的索引，然后middle是两者和除以2的商。如果middle对应的数字大于等于start对应的数字，那么说明middle在前半部分，则把middle的值赋给start；否则说明middle在后半段，middle值赋给end。循环直到end-start==1。此时end对应的数就是答案。
+
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def minNumberInRotateArray(self, rotateArray):
+        # write code here
+        if not rotateArray:
+            return 0
+        
+        start = 0
+        end = len(rotateArray) - 1
+        
+        while (end - start) > 1:
+            middle = (start + end) // 2
+            if rotateArray[middle] >= rotateArray[start]:
+                start = middle
+            else:
+                end = middle
+        return rotateArray[end]
+```
+
+
 
 # 面试题32：从上到下打印二叉树
 
@@ -856,6 +887,7 @@ def more_than_half_num(num):
 ```
 
 #面试题40：无序数组里最大的k个数
+
 **这个题绝对是高频题，很多面经里面都提到了** 
 
 解法1：当我们可以修改输入的数组时，使用partition函数可以做到时间复杂度为O(n)。
