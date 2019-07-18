@@ -805,6 +805,83 @@ print(solution.max_product(80))
 print(solution.max_product2(80))
 ```
 
+# 面试题15：二进制中1的个数
+
+>请实现一个函数，输入一个整数，输出该数二进制表示中1的个数。例如输入9,9的二进制表示是1001，则输出2.
+
+## 位运算回顾
+
+**位运算是把数字表示为二进制后，对每一位上0或1的运算，总共有六种：与(&)、或(|)、非(~)、异或(^)、左移(<<)和右移(>>)。**其中：
+- 异或是**同0异1**   
+- 左移运算符m << n表示把m左移n位，最左边的n位将会被抛弃，同时在最右边补上n个0  
+- 右移运算符m >> n表示把m右移n位，最右边的n位将会被抛弃，如果数字是整数，则右移之后在最左边补n个0，如果数字是负数，则右移之后在最左边补n个1.
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def NumberOf1(self, n):
+        # write code here
+        return sum([(n>>i & 1) for i in range(32)]) # 循环的次数等于整数二进制的位数，32位的整数需要循环32次
+
+solution = Solution()
+print(solution.NumberOf1(0x80000000))
+```
+
+**上面这种算法在C++里如果输入0x80000000会进入死循环(最后一直是0xFFFFFFFF)，但是Python里面不会。**
+
+# 面试题16：数值的整数次方
+
+>实现函数power(base, exponent)，其中base是double类型，exponent是整数类型。
+
+解法一：需要考虑exponent为负数时取倒数的情况。还需要考虑当base=0时如果exponent为负数，要抛出异常。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def Power(self, base, exponent):
+        # write code here
+        if base == 0 and exponent < 0:
+            raise ValueError
+        result = 1
+        for i in range(abs(exponent)):
+            result *= base
+        if exponent > 0:
+            return result
+        elif exponent == 0:
+            return 1
+        else:
+            return 1. / result
+```
+
+解法二：指数分奇偶有不同的递归方法。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def Power(self, base, exponent):
+        # write code here
+        if base == 0:
+            return 0
+        if exponent == 1:
+            return base
+        if exponent == 0:
+            return 1
+        flag = 0
+        if exponent < 0:
+            flag = -1
+            exponent = -1 * exponent
+        if flag == 0:
+            if exponent % 2 == 0:
+                return self.Power(base, exponent/2) * self.Power(base, exponent/2)
+            if exponent % 2 == 1:
+                return self.Power(base, (exponent-1)/2) * self.Power(base, (exponent-1)/2) * base
+        else:
+            if exponent % 2 == 0:
+                return 1. / (self.Power(base, exponent/2) * self.Power(base, exponent/2))
+            if exponent % 2 == 1:
+                return 1. / (self.Power(base, (exponent-1)/2) * self.Power(base, (exponent-1)/2) * base)
+```
+
 
 # 面试题32：从上到下打印二叉树
 
