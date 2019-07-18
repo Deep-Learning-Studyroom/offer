@@ -668,6 +668,78 @@ print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCE"))
 print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCJ"))
 ```
 
+# 机器人的运动范围
+
+>地上有一个m行n列的方格。一个机器人从坐标(0,0)的格子开始移动，它每次可以向左、右、上、下移动一格，但不能进入行坐标和列坐标的位数之和大于k的格子。请问该机器人能够到达多少个格子？
+
+解法1：回溯法。仿照“矩阵中的路径”的解法。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def movingCount(self, threshold, rows, cols):
+        # write code here
+        if threshold == 0:
+            return 1
+        res = []
+        flags = [0] * (rows * cols)
+        col = 0
+        row = 0
+        return len(self.find(threshold, rows, cols, row, col, flags, res))
+
+    def find(self, threshold, rows, cols, row, col, flags, res):
+        #print('*')
+        index = row * cols + col
+        if col < 0 or col > cols - 1 or row < 0 or row > rows - 1 or flags[index] == 1 or self.mySum(col) + self.mySum(row) > threshold:
+            return res
+        flags[index] = 1
+        res.append((row, col))
+        #print((row, col))
+
+        res = self.find(threshold, rows, cols, row - 1, col, flags, res)
+        res = self.find(threshold, rows, cols, row + 1, col, flags, res)
+        res = self.find(threshold, rows, cols, row, col - 1, flags, res)
+        res = self.find(threshold, rows, cols, row, col + 1, flags, res)
+
+        return res
+
+    def mySum(self, int1):
+        sum1 = 0
+        while int1 > 0:
+            sum1 += int1 % 10
+            int1 = int1 // 10
+        return sum1
+
+solution = Solution()
+print(solution.movingCount(5,10,10))
+print(solution.movingCount(15,20,20))
+```
+优化后的代码如下(去掉flags数组，精简代码)：
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def __init__(self):
+        self.res = set()
+    def movingCount(self, threshold, rows, cols):
+        # write code here
+        return self.find(threshold, rows, cols, 0, 0)
+
+    def find(self, threshold, rows, cols, row, col):
+        index = row * cols + col
+        if col < 0 or col > cols - 1 or row < 0 or row > rows - 1 or (row, col) in self.res or self.mySum(col) + self.mySum(row) > threshold:
+            return 0
+        self.res.add((row, col))
+        return 1 + self.find(threshold, rows, cols, row, col-1) + self.find(threshold, rows, cols, row, col+1) + self.find(threshold, rows, cols, row-1, col) + self.find(threshold, rows, cols, row+1, col)
+
+    def mySum(self, int1):
+        sum1 = 0
+        while int1 > 0:
+            sum1 += int1 % 10
+            int1 = int1 // 10
+        return sum1
+```
+
 
 
 
