@@ -668,11 +668,11 @@ print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCE"))
 print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCJ"))
 ```
 
-# 机器人的运动范围
+# 面试题13：机器人的运动范围
 
 >地上有一个m行n列的方格。一个机器人从坐标(0,0)的格子开始移动，它每次可以向左、右、上、下移动一格，但不能进入行坐标和列坐标的位数之和大于k的格子。请问该机器人能够到达多少个格子？
 
-解法1：回溯法。仿照“矩阵中的路径”的解法。
+解法:：回溯法。仿照“矩阵中的路径”的解法。
 
 ```python
 # -*- coding:utf-8 -*-
@@ -740,7 +740,70 @@ class Solution:
         return sum1
 ```
 
+# 面试题14：剪绳子
 
+>给你一根长度为n的绳子，请把绳子剪成m段（m, n都是整数，n > 1 并且 m > 1），每段绳子的长度记为k[0], k[1], ```, k[m]。请问它们的乘积可能的最大值是多少？例如，当绳子的长度为8时，我们把它剪成长度为2、3、3的三段，此时得到的乘积最大，是18.
+
+解法一：动态规划。时间复杂度O(n^2)，空间复杂度O(n)。**灵活运用动态规划的关键是具备从上到下分析问题，并且从下到上解决问题的能力。**
+
+解法二：贪婪算法。时间复杂度和空间复杂度均为O(n)。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def max_product(self, n):
+        """动态规划"""
+        if n < 2:
+            return 0
+        elif n == 2:
+            return 1
+        elif n == 3:
+            return 2
+
+        products = [0] * (n+1)
+        products[0] = 0
+        products[1] = 1
+        products[2] = 2
+        products[3] = 3
+
+        for i in range(4, n+1):
+            max_val = 0
+            for j in range(1, i // 2 + 1):
+                product = products[j] * products[i - j]
+                if max_val < product:
+                    max_val = product
+                    products[i] = max_val
+        print(products)
+        return products[n]
+
+    def max_product2(self, n):
+        """贪婪算法
+        数学上可以证明，当n>=5时，尽可能多的剪长度为3的绳子，且最后一段绳子如果是4的话，把它剪成2+2的两段。
+        证明：当n >= 5时，下列不等式恒成立  3(n-1) >= 2(n-2) > n。
+        因此，当n大于等于5时，尽可能剪成长度为3或2的小段，并且尽可能剪成长度为3的小段。并且当n=4时，剪成2+2比1+3更好。
+        证毕！
+        """
+        if n < 2:
+            return 0
+        elif n == 2:
+            return 1
+        elif n == 3:
+            return 2
+
+        times_of_2 = 0
+        times_of_3 = 0
+
+        times_of_3 = n // 3
+        if n % 3 == 1:
+            times_of_3 -= 1
+        times_of_2 = (n - times_of_3 * 3) / 2
+
+        return int(3 ** times_of_3 * 2 ** times_of_2)
+
+solution = Solution()
+print(solution.max_product(80))
+print(solution.max_product2(80))
+```
 
 
 # 面试题32：从上到下打印二叉树
