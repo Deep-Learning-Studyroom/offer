@@ -1,5 +1,11 @@
  # 编程题解-剑指offer
-## 数组中的逆序对
+
+[TOC]
+
+# 数组中的逆序对
+
+
+
 ```python
 # -*- coding:utf-8 -*-
 class Solution:
@@ -54,6 +60,10 @@ if __name__ == '__main__':
 归并排序思想，这个版本是从讨论区java版本复现来的，但是说时间复杂度过高，很郁闷。总之这道题思路就是在归并排序的过程中统计逆序对，具体见https://www.nowcoder.com/profile/1591420/codeBookDetail?submissionId=15823415
 
 # <a href="https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&tqId=11199&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">孩子们的游戏</a>
+
+
+
+
 
 一个环，由n个顺序数字组成（0 ~ n-1），任给一个数字m，从0开始往环的前向走，将第m-1个数字移出队伍。然后从这个数字的后一个数字起再移出它后面的第m-1个数字。直到这个环只剩一个数字时，输出这个数字。
 
@@ -510,4 +520,59 @@ class Solution:
         else:
             return False
 ```
+
+# 表示数值的字符串
+
+此题的关键在于始终用一个numeric来标识：到字符串的目前位置为止，前面的字符是否符合数值规范。然后数值可以被E或e隔开，E的前后都可以是一个完整数值。完整数值的第一为可以是+或者-号， 也可以是数字，当向后遍历出现不是数值的字符时，这个字符必须是”.”、E、e、或者是空（即字符串遍历结束），若已经遇见过E、e或者小数点，则后面只能出现数字（第一位可以是正负号）。 判断数值使使用ord（）函数判断Ascii码，在遍历的过程中不断对s进行切片操作，以模拟指针，也可以用一个index来模拟指针。另外注意在对s进行切片前，要判断长度，防止越界，如果当前位是最后一位，则将s置空。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s字符串
+    def isNumeric(self, s):
+        # write code here
+        if s is None:
+            return False
+        numeric, s = self.scanInteger(s)
+        if s is not None and s[0] == ".":
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            temp, s = self.scanUnsignedInteger(s)
+            numeric = temp or numeric
+
+        if s is not None and (s[0] == "E" or s[0] == "e"):
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            temp, s = self.scanInteger(s)
+            numeric = temp and numeric
+        return numeric and s is None
+
+    def scanInteger(self, s):
+      """判断完整数字，先判断符号，再判断没有符号的数字"""
+        if s is not None and (s[0] == "+" or s[0] == "-"):
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+        return self.scanUnsignedInteger(s)
+
+    def scanUnsignedInteger(self, s):
+      """判断没有符号的数字，只要出现了一次数字，flag即为True，一直遍历到第一次遇见非数值为止"""
+        flag = False  # 是否有若干数字的标识
+        while s is not None and ord(s[0]) >= 48 and ord(s[0]) <= 57:
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            flag = True
+        return flag, s
+```
+
+
+
+
 
