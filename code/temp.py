@@ -1,27 +1,37 @@
-
 # -*- coding:utf-8 -*-
-'''
-重建二叉树
-题目描述
-输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
-例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
-'''
-class TreeNode:
-    def __init__(self, x):
-        self.val = x
-        self.left = None
-        self.right = None
 class Solution:
-    # 返回构造的TreeNode根节点
-    def reConstructBinaryTree(self, pre, tin):
-        # write code here
-        if len(pre) == 0:
-            return None
-        if len(pre) == 1:
-            return TreeNode(pre[0])
+    def hasPath(self, matrix, rows, cols, path):
+        for row in range(rows):
+            for col in range(cols):
+                if matrix[row * cols + col] == path[0]:
+                    if self.find(list(matrix), rows, cols, path[1:], row, col):
+                        return True
+        return False
+
+    def find(self, matrix, rows, cols, path, row, col):
+        if not path:
+            return True
+        print(row, col, matrix[row * cols + col])
+        matrix[row * cols + col] = '0'
+        for i in range(rows):
+            for j in range(cols):
+                print(matrix[i * cols + j], end=" ")
+            print()
+        print()
+        if col + 1 <= cols - 1 and matrix[row * cols + (col + 1)] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row, col + 1)
+        elif col - 1 >= 0 and matrix[row * cols + (col - 1)] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row, col - 1)
+        elif row + 1 <= rows - 1 and matrix[(row + 1) * cols + col] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row + 1, col)
+        elif row - 1 >= 0 and matrix[(row - 1) * cols + col] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row - 1, col)
         else:
-            # 每棵子树的根节点肯定是pre子数组的首元素，所以每次新建一个子树的根节点
-            res = TreeNode(pre[0])
-            res.left = self.reConstructBinaryTree(pre[1: tin.index(pre[0]) + 1], tin[: tin.index(pre[0])])
-            res.right = self.reConstructBinaryTree(pre[tin.index(pre[0]) + 1: ], tin[tin.index(pre[0]) + 1: ])
-        return res
+            return False
+
+solution = Solution()
+
+#print(solution.hasPath("ABCESFCSADEE",3,4,"SEC"))
+#print(solution.hasPath("ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS",5,8,"SGGFIECVAASABCEHJIGQEM"))
+#print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCE"))
+print(solution.hasPath("ABTGCFCSJDEH",3,4,"BFCJ"))

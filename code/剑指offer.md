@@ -622,6 +622,50 @@ class Solution:
         return rotateArray[end]
 ```
 
+# 面试题12：矩阵中的路径
+
+>请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左右上下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。
+
+解法：**通常在二维矩阵中找路径都可以用回溯法解决**。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def hasPath(self, matrix, rows, cols, path):
+        for row in range(rows):
+            for col in range(cols):
+                if matrix[row * cols + col] == path[0]:
+                    if self.find(list(matrix), rows, cols, path[1:], row, col):
+                        return True
+        return False
+
+    def find(self, matrix, rows, cols, path, row, col):
+        if not path:
+            return True
+        print(row, col, matrix[row * cols + col])
+        matrix[row * cols + col] = '0'
+        for i in range(rows):
+            for j in range(cols):
+                print(matrix[i * cols + j], end=" ")
+            print()
+        print()
+        if col + 1 <= cols - 1 and matrix[row * cols + (col + 1)] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row, col + 1)
+        elif col - 1 >= 0 and matrix[row * cols + (col - 1)] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row, col - 1)
+        elif row + 1 <= rows - 1 and matrix[(row + 1) * cols + col] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row + 1, col)
+        elif row - 1 >= 0 and matrix[(row - 1) * cols + col] == path[0]:
+            return self.find(matrix, rows, cols, path[1:], row - 1, col)
+        else:
+            return False
+
+solution = Solution()
+
+#print(solution.hasPath("ABCESFCSADEE",3,4,"SEE"))
+print(solution.hasPath("ABCEHJIGSFCSLOPQADEEMNOEADIDEJFMVCEIFGGS",5,8,"SGGFIECVAASABCEHJIGQEM"))
+```
+**注意：使用for row in range(rows)这种做法不如for i in range(rows)。因为后面容易把row和rows搞错，IDE还发现不了。这样一个bug我找了一个小时**:sob:
 
 
 # 面试题32：从上到下打印二叉树
