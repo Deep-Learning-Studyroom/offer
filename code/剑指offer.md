@@ -1051,11 +1051,59 @@ print(-1323479817 + 1372987318423498414)
 print(-1323479817 - 1372987318423498414)
 ```
 
+# 面试题18：删除链表的节点
 
+## 题目一：在O(1)时间内删除链表节点。
 
+>给定单向链表的头指针和一个节点指针(非结尾指针)，定义一个函数在O(1)时间内删除该节点。
 
+解法分析：假设要删除的节点及其前后节点为h, i, j，常规的做法是从链表的头结点开始，直到遍历到h时发现它的下一个指针指向i，那么把h的下一个指针指向j，然后删除i。但是这么做时间复杂度为O(n)。之所以需要遍历一遍，是因为我们要找到待删除节点的前一个节点。但是，**更好的做法是不找前一个节点，把后一个节点的值和它的下一个节点的指针赋给当前待删除节点，然后删除后一个节点即可。**需要注意的是，如果要删除的节点是最后一个节点，那么还是需要遍历一遍。但是总体上来说，平均时间复杂度是O(1)。
 
-# 面试太13：
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def deleteNode(self, node):
+        """
+        :type node: ListNode
+        :rtype: void Do not return anything, modify node in-place instead.
+        """
+        node.val, node.next = node.next.val, node.next.next
+```
+
+## 题目二：删除链表中重复的节点
+
+>在一个排序的链表中，如何删除重复的节点？
+
+解法：注意全面地考虑问题
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    def deleteDuplication(self, pHead):
+        # write code here
+        if pHead is None or pHead.next is None:
+            return pHead
+        head1 = pHead.next
+        if head1.val != pHead.val:
+            pHead.next = self.deleteDuplication(head1)  # 当前节点和下一个节点不相同，所以当前节点不删除，递归找下一个节点
+        else:
+            while pHead.val == head1.val and head1.next is not None:
+                head1 = head1.next
+            if head1.val != pHead.val:
+                pHead = self.deleteDuplication(head1)        # 当前节点和下一个节点不相同，但是pHead是重复节点，所以递归找当前节点
+            else:
+                return None
+        return pHead
+```
 
 # 面试题32：从上到下打印二叉树
 
