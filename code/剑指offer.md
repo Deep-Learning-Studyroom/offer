@@ -1109,7 +1109,39 @@ class Solution:
 
 >请实现一个函数用来匹配包含'.'和'*'的正则表达式。模式中的字符'.'表示任何一个字符，而'*'表示它前面的字符可以出现任意次（含0次）。在本题中，匹配指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但是与"aa.a"和"ab*a"均不匹配。
 
-解法：
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s, pattern都是字符串
+    def match(self, s, pattern):
+        # write code here
+        """
+        算法思路：需要特别注意的是：*表示前面的数字可以出现任意次，包括0！
+        对于pattern下一个字符是*的情况，如果当前字符和pattern不匹配，
+        那么pattern后移两个即可（这时*的意思是出现0次）；如果匹配，那么又要
+        分三种情况；
+        如果pattern下一个字符不是*，那么直接看当前字符是否匹配，匹配就s和
+        pattern各往后一个
+        
+        递归的思路比用两个指针的方法要简单多了
+        """
+        if (len(s) == 0 and len(pattern) == 0):
+            return True
+        if (len(s) > 0 and len(pattern) == 0):
+            return False
+        
+        if (len(pattern) > 1 and pattern[1] == '*'):
+            if (len(s) > 0 and (s[0] == pattern[0] or pattern[0] == '.')):
+                return (self.match(s, pattern[2:]) or self.match(s[1:], pattern[2:]) or self.match(s[1:], pattern))
+            else:
+                return self.match(s, pattern[2:])
+        if (len(s) > 0 and (pattern[0] == '.' or pattern[0] == s[0])):
+            return self.match(s[1:], pattern[1:])
+        return False
+```
+
+
+
 
 # 面试题32：从上到下打印二叉树
 
