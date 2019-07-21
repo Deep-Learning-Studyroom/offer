@@ -572,6 +572,26 @@ class Solution:
         return flag, s
 ```
 
+# 调整数组顺序使奇数位于偶数前面
+
+牛客上的题目和书上的题目不完全一样，牛客上题目是：给定一个list，将所有奇数调到偶数的前面，并且奇数之间、偶数之间数字的排列顺序不变。解题方案，直接使用python list的insert和del方法。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def reOrderArray(self, array):
+        # write code here
+        if len(array) == 0:
+            return []
+        cur = 0
+        for i in range(0, len(array)):
+            if array[i] % 2 == 1:
+                array.insert(cur, array[i])
+                del array[i+1]
+                cur += 1
+        return array
+```
+
 
 
 
