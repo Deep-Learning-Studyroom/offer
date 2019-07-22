@@ -1140,8 +1140,80 @@ class Solution:
         return False
 ```
 
+# 面试题20：表示数值的字符串
+
+>请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串“+100”、“5e2”、“-123”、“3.1416”及“-1E-16”都表示数值。但“12e”、“1a3.14”、“1.2.3”、
+“+-5”及“12e+5.4”都不是。
+
+解法：数值型字符串分为五部分[整数部分].[小数部分]e/E[指数部分]。其中整数部分可能有+、-号，如果有小数部分，那么整数部分也可以没有。小数部分也可以没有，如果有整数部分的话。指数部分也可能以+-号开头。
+
+```python
+# -*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
+class Solution:
+    # s字符串
+    def isNumeric(self, s):
+        # write code here
+        if s is None:
+            return False
+        flag, s = self.scanInteger(s)
+
+        if s is not None and s[0] == '.':
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            flag1, s = self.scanUnsignedInteger(s)
+            flag = flag or flag1
+
+        if s is not None and (s[0] == 'e' or s[0] == 'E'):
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            flag2, s = self.scanInteger(s)
+            flag = flag and flag2
+
+        return flag and s is None
+
+    def scanUnsignedInteger(self, s):
+        flag = False
+        while s is not None and '0' <= s[0] <= '9':
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+            flag = True
+        return flag, s
+
+    def scanInteger(self, s):
+        if s is not None and (s[0] == '+' or s[0] == '-'):
+            if len(s) > 1:
+                s = s[1:]
+            else:
+                s = None
+        return self.scanUnsignedInteger(s)
 
 
+print(Solution().isNumeric("12."))
+print(Solution().isNumeric("12.e"))
+print(Solution().isNumeric("12.1e-10"))
+```
+
+也可以直接用python的float函数和try except.
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # s字符串
+    def isNumeric(self, s):
+        # write code here
+        try :
+            p = float(s)
+            return True
+        except:
+            return False
+```
 
 # 面试题32：从上到下打印二叉树
 
