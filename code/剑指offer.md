@@ -1215,6 +1215,63 @@ class Solution:
             return False
 ```
 
+# 面试题21：调整数组顺序使奇数位于偶数前面
+
+>输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分。
+
+解法分析：如果从前到后扫描数组，遇到一个偶数就把它拿出来，后面的数字全部前移，然后再把这个偶数放到最后一个空出来的位置。这么做时间复杂
+度是O(n^2)，不好。另一种做法是设计两个数组，从前往后依次扫描原数组，如果是奇数则append到新数组1中，如果是偶数则append到新数组2中。最后
+新数组1和新数组2合并。时间复杂度是O(n)，但是空间复杂度也是O(n)。如果空间复杂度要求不高那么这个方法就可以。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def reOrderArray(self, array):
+        # write code here
+        even_list = []
+        odd_list = []
+        for value in array:
+            if value % 2 == 1:
+                odd_list.append(value)
+            else:
+                even_list.append(value)
+        return odd_list + even_list
+```
+
+解法2：双端队列。从前向后扫描数组中的元素，如果有偶数，则append进双端队列；从后向前扫描数组中的元素，如果是奇数，则appendleft进双端队列。
+注意需要两个方向分别扫描，因为必须保证奇数和偶数的相对位置不变。
+
+```python
+# -*- coding:utf-8 -*-
+from collections import deque
+class Solution:
+    def reOrderArray(self, array):
+        # write code here
+        odd = deque()
+        x = len(array)
+        for i in range(x):
+            if array[i] % 2 == 0:
+                odd.append(array[i])
+            if array[x - i - 1] % 2 == 1:
+                odd.appendleft(array[x - i - 1])
+        return list(odd)
+```
+
+解法3：数组内互换的方式，时间复杂度高O(n^2)，但是空间复杂度O(1)
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def reOrderArray(self, array):
+        # write code here
+        count = 0
+        for i in range(0,len(array)):
+            for j in range(len(array)-1,i,-1):
+                if array[j-1]%2 ==0 and array[j]%2==1:
+                    array[j-1], array[j] = array[j], array[j-1]
+        return array
+```
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
