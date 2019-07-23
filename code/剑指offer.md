@@ -1396,7 +1396,39 @@ class Solution:
         return node3
 ```
 
+# 面试题24：反转链表
 
+>定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    # 返回ListNode
+    def ReverseList(self, pHead):
+        # write code here
+        if pHead is None:
+            return None
+        if pHead.next is None:
+            return pHead
+        if pHead.next.next is None:
+            pHead.next.next = pHead
+            node = pHead.next
+            pHead.next = None
+            return node
+        node_b, node, node_n = None, pHead, pHead.next
+        while node.next is not None:
+            node_n = node.next  # 保存下一个节点下一次迭代用
+            node.next = node_b  # node的指针指向前一个节点
+            node_b = node       # 当前的节点是下一个节点的前一个节点，保存起来
+            node = node_n       # 节点往后移一步
+        # 还剩最后一个节点没改变指针
+        node.next = node_b
+        return node
+```
 
 # 面试题32：从上到下打印二叉树
 
