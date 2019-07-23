@@ -1430,7 +1430,7 @@ class Solution:
         return node
 ```
 
-# 合并两个排序的链表
+# 面试题25：合并两个排序的链表
 
 >输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
 
@@ -1459,6 +1459,76 @@ class Solution:
             pMergedHead = pHead2
             pMergedHead.next = self.Merge(pHead1, pHead2.next)
         return pMergedHead
+```
+
+# 面试题26：树的子结构
+
+>输入两棵二叉树A和B，判断B是不是A的子结构。
+
+**和链表相比，树的指针操作更多也更复杂，因此与树相关的问题通常会比链表更难。**
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def __init__(self):
+        self.lis = []
+    def HasSubtree(self, pRoot1, pRoot2):
+        # write code here
+        if pRoot1 is None or pRoot2 is None:
+            return False
+        flag = False
+        self.front_recursive(pRoot1)
+        for node in self.lis:
+            if node.val == pRoot2.val:
+                flag = flag or self.compare(node, pRoot2)
+        return flag
+        
+    def front_recursive(self, root):
+        if root is None:
+            return 
+        self.lis.append(root)
+        self.front_recursive(root.left)
+        self.front_recursive(root.right)
+        
+    def compare(self, root1, root2):
+        if root2 is None:
+            return True
+        if root1 is None and root2 is not None:
+            return False
+        flag = True
+        if root1.val == root2.val:
+            flag = True
+        else:
+            flag = False
+        return flag and self.compare(root1.left, root2.left) and self.compare(root1.right, root2.right)
+```
+上面的代码需要一个单独的列表存放所有节点，不是最好的方法。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def HasSubtree(self, pRoot1, pRoot2):
+        # write code here
+        if not pRoot1 or not pRoot2:
+            return False
+        return self.is_subtree(pRoot1, pRoot2) or self.HasSubtree(pRoot1.left, pRoot2) or self.HasSubtree(pRoot1.right, pRoot2)
+     
+    def is_subtree(self, A, B):
+        if not B:
+            return True
+        if not A or A.val != B.val:
+            return False
+        return self.is_subtree(A.left,B.left) and self.is_subtree(A.right, B.right)
 ```
 
 # 面试题32：从上到下打印二叉树
