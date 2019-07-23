@@ -1334,6 +1334,67 @@ class Solution:
         return head
 ```
 
+**这道题的代码要注意鲁棒性，如果特殊情况没有考虑导致代码崩溃，很难拿到offer**
+
+拓展：**求链表的中间节点，如果总结点数为奇数就是中间那个，如果是偶数就返回中间两个节点的任意一个**。同样可以用遍历两次的方法或者两个指针
+的方法。两个指针的方法是，设置第一个指针每次走一步，第二个指针每次走两步，这样当第二个指针的下下个节点为空时，它已经到最后一个节点或者倒
+数第二个节点，此时第一个指针对应的节点就是中间节点
+
+# 面试题23：链表中环的入口节点
+
+>如果一个链表中有环，如何找到环的入口节点？
+
+解法：
+
+- 首先是判断链表中有环。具体做法是两个速度不一样的指针，速度分别是一次一步和一次两步，如果走的快的指针追上了走得慢的指针，那么说明
+链表有环；如果走的快的指针到链表的结尾（指针对应节点是None）也没有追上，那么就没有环。
+
+- 然后是找到环的入口节点。找到链表中环中节点的个数n，然后让第一个节点先走n步，然后两个节点以相同的速度（一次一步）向前移动，两者相遇的
+节点就是环的入口。
+
+- 找到n的方法。如果链表有环，两者相遇的节点肯定在环内，然后从这个节点出发，一边计数一边移动，再次回到这个节点就可以知道环中的节点数量n。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    def EntryNodeOfLoop(self, pHead):
+        # write code here
+        
+        if pHead is None or pHead.next is None or pHead.next.next is None:
+            return None
+        if pHead.next == pHead:
+            return pHead
+        node1 = pHead
+        node2 = pHead.next.next
+        
+        while node1 != node2:
+            if node2.next.next is not None:
+                node1 = node1.next
+                node2 = node2.next.next
+            else:
+                return None
+        num = 1
+        node = node1
+        node = node1.next
+        while node1 != node:
+            node = node.next
+            num += 1
+        node3 = pHead
+        node4 = pHead
+        
+        for i in range(num):
+            node4 = node4.next
+        
+        while node3 != node4:
+            node3 = node3.next
+            node4 = node4.next
+        
+        return node3
+```
 
 
 
