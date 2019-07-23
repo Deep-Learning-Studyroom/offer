@@ -1272,6 +1272,71 @@ class Solution:
         return array
 ```
 
+# 链表中倒数第k个节点
+
+>输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾结点是倒数第一个节点。例如，一个链表有6个节点，
+从头节点开始，它们的值依次是1、2、3、4、5、6,。这个链表的倒数第三个节点值为4.
+
+解法1：倒数第k个节点就是正数第 n-k+1 个。第一次遍历，得到所有节点数n的值，第二次遍历，找到第n-k+1个节点，输出其值。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def FindKthToTail(self, head, k):
+        # write code here
+        if head is None:
+            return None
+        n = 1 # total node number
+        node = head
+        while node.next is not None:
+            n += 1
+            node = node.next
+        
+        if k > n:
+            return None
+        for i in range(n-k+1-1):
+            head = head.next
+        return head
+```
+
+解法2：如果只能遍历一次，怎么做？双指针。首先第一个指针从头开始遍历k-1步，第二个指针不变，此时两个指针的距离是k-1。那么后面同时向后移动
+两个指针，如果第一个指针到达最后一个位置，那么第二个指针对应的节点就是我们找的。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def FindKthToTail(self, head, k):
+        # write code here
+        if head is None:
+            return None
+        if k == 0:
+            return None
+        node = head
+        for i in range(k-1):
+            if node.next is not None:
+                node = node.next
+            else:
+                return None
+
+        while node.next is not None:
+            node = node.next
+            head = head.next
+        return head
+```
+
+
+
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
