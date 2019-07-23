@@ -1430,6 +1430,37 @@ class Solution:
         return node
 ```
 
+# 合并两个排序的链表
+
+>输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+
+解法：高频面试题，用递归做比较好。注意代码的鲁棒性，提前考虑空链表的情况。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    # 返回合并后列表
+    def Merge(self, pHead1, pHead2):
+        # write code here
+        if pHead1 is None:
+            return pHead2
+        elif pHead2 is None:
+            return pHead1
+        pMergedHead = ListNode(None)
+        
+        if pHead1.val < pHead2.val:
+            pMergedHead = pHead1
+            pMergedHead.next = self.Merge(pHead1.next, pHead2)
+        else:
+            pMergedHead = pHead2
+            pMergedHead.next = self.Merge(pHead1, pHead2.next)
+        return pMergedHead
+```
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
