@@ -1531,6 +1531,33 @@ class Solution:
         return self.is_subtree(A.left,B.left) and self.is_subtree(A.right, B.right)
 ```
 
+# 面试题27：二叉树的镜像
+
+>请完成一个函数，输入一棵二叉树，该函数输出它的镜像。
+
+解法：首先注意的是改变原树，而不是返回一棵新的树。具体的做法就是交换左右子节点的值，然后用递归的方法遍历。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    # 返回镜像树的根节点
+    def Mirror(self, root):
+        # write code here
+        """遍历一棵树的同时交换左右节点的值"""
+        if not root:
+            return None
+        root.left, root.right = root.right, root.left
+        self.Mirror(root.left)
+        self.Mirror(root.right)
+```
+
+
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
