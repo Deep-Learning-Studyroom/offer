@@ -1556,7 +1556,36 @@ class Solution:
         self.Mirror(root.right)
 ```
 
+# 面试题28：对称的二叉树。
 
+>请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+解法：**注意并不是保证所有节点的左右子节点相等就行**。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def isSymmetrical(self, pRoot):
+        # write code here
+        if not pRoot:
+            return True
+        res = self.is_sym(pRoot, pRoot)
+        return res
+    
+    def is_sym(self, root1, root2):  
+        if not root1 and not root2:
+            return True
+        if not root1 or not root2:
+            return False
+        if root1.val != root2.val:
+            return False
+        return self.is_sym(root1.left, root2.right) and self.is_sym(root1.right, root2.left)
+```
 
 # 面试题32：从上到下打印二叉树
 
