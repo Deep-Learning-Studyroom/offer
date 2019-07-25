@@ -34,3 +34,9 @@ Goodfellow等从理论上证明了当GAN模型收敛时，生成数据具有和�
 
 **g_loss = criterion(D(fake_images), real_labels)**
 
+# 原始GAN最优解的推导
+
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/GAN1.jpg) 
+
+![](https://github.com/Deep-Learning-Studyroom/offer/blob/master/pictures/GAN2.jpg) 
+
