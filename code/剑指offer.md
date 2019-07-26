@@ -1587,6 +1587,40 @@ class Solution:
         return self.is_sym(root1.left, root2.right) and self.is_sym(root1.right, root2.left)
 ```
 
+# 面试题29：顺时针打印矩阵
+
+解法：要提高程序的鲁棒性，一定要（1）提前进行特殊情况处理，比如只有一个元素的矩阵；比如只有一行的矩阵（因为输入是二维列表，虽然只有一行
+但是提取元素时也得两次索引） （2）想好打印一圈的四个点的两个索引是什么，打印每一行每一列的起点和终点是什么
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    # matrix类型为二维列表，需要返回列表
+    def printMatrix(self, matrix):
+        # write code here
+        """
+        [o, o]         ...            [o, cols-o-1]
+              .                                        .
+              .                                        .
+              .                                        .
+        [rows-o-1, o]  ...            [rows-o-1, cols-o-1]
+        """
+        res=[]
+        rows=len(matrix)
+        cols=len(matrix[0])
+        if rows==1 and cols==1:
+            res=[matrix[0][0]]
+            return res
+        if cols == 1:
+            res = [i[0] for i in matrix]
+            return res
+        for o in range((min(rows,cols)+1)//2):
+            [res.append(matrix[o][i]) for i in range(o,cols-o)]
+            [res.append(matrix[j][cols-1-o]) for j in range(o+1,rows-o)]
+            [res.append(matrix[rows-1-o][k]) for k in range(cols-1-o-1,o-1,-1) if rows-1-o != o]
+            [res.append(matrix[l][o]) for l in range(rows-1-o-1,o,-1) if cols-0-1 != o]
+        return res
+```
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
