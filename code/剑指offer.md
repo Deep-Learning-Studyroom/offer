@@ -1661,6 +1661,37 @@ class Solution:
         return self.stack2[-1]
 ```
 
+# 面试题31：栈的压入、弹出序列
+
+>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否可能为该栈的弹出顺序。假设压入栈的所有数字均不相等。
+例如序列1,2,3,4,5是某栈的压入顺序，序列4,5,3,2,1是该压栈序列对应的一个弹出序列，但4,3,5,1,2就不可能是该压栈序列的弹出序列。
+（注意：这两个序列的长度是相等的）
+
+解法：先定义一个空的栈。遍历pushV，如果值和popV的0号元素相等，则popV.pop(0)；如果不相等，则把元素append进栈；
+遍历结束后遍历新得到的栈，如果栈的-1元素和popV的0元素相等，就分别pop掉；否者返回错误；遍历完(代表没有返回错误)就返回正确。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def IsPopOrder(self, pushV, popV):
+        # write code here
+        stack = []
+        if not pushV and not popV:
+            return True
+        for val in pushV:
+            if val == popV[0]:
+                popV.pop(0)
+            else:
+                stack.append(val)
+        while stack:
+            if stack[-1] != popV[0]:
+                return False
+            else:
+                stack.pop(-1)
+                popV.pop(0)
+        return True
+```
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
