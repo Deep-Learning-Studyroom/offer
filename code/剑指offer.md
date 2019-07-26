@@ -1960,20 +1960,20 @@ class Solution:
         # write code here
         if not root:
             return []
-        
+            
         # 只有根节点且根节点等于expectNumber的情况
         if root and not root.left and not root.right and root.val == expectNumber:
             return [[root.val]]
-        
-        # 递归
         res = []
-        left = self.FindPath(root.left, expectNumber - root.val)
-        right = self.FindPath(root.right, expectNumber - root.val)
+        left = self.FindPath(root.left, expectNumber-root.val)
+        right = self.FindPath(root.right, expectNumber-root.val)
         
         for i in left + right:
             res.append([root.val] + i)
-        
         return res
+
+        
+
 ```
 
 # 面试题39：数组中出现次数超过一半的数字
@@ -1996,7 +1996,7 @@ def more_than_half_num(num):
     return result
 ```
 
-#面试题40：无序数组里最大的k个数
+# 面试题40：无序数组里最大的k个数
 
 **这个题绝对是高频题，很多面经里面都提到了** 
 
