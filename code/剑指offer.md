@@ -1621,6 +1621,46 @@ class Solution:
             [res.append(matrix[l][o]) for l in range(rows-1-o-1,o,-1) if cols-0-1 != o]
         return res
 ```
+
+# 面试题30：包含min函数的栈
+
+>定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的min函数。在该栈中，调用min、push和pop的时间复杂度都是O(1)。
+
+解法：另外定义一个辅助栈，每次对栈做push时都比较一下当前值和辅助栈顶端值的大小，如果push的数小则把该数也push进辅助栈里。
+对栈pop时检查是否是当前最小值（辅助栈的栈顶元素），如果是，则两个栈都要pop
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def __init__(self):
+        self.stack = []
+        self.stack2 = [] # 辅助栈
+    def push(self, node):
+        # write code here
+        self.stack.append(node)
+        if not self.stack2:
+            self.stack2.append(node)
+        else:
+            if self.stack2[-1] > node:
+                self.stack2.append(node)
+        return 
+    def pop(self):
+        # write code here
+        if not self.stack:
+            return
+        if self.stack[-1] == self.stack2[-1]:
+            self.stack2.pop(-1)
+        return self.stack.pop(-1)
+    def top(self):
+        # write code here
+        if not self.stack:
+            return 
+        return self.stack[-1]
+    def min(self):
+        # write code here
+        return self.stack2[-1]
+```
+
 # 面试题32：从上到下打印二叉树
 
 **题目一：不分行从上到下打印二叉树**
