@@ -1843,6 +1843,48 @@ class Tree(object):
                     print(j, end=" ")
                 if i != len(all) - 1:
                     print()
+    
+        def print_binary_tree4(self):
+        """之字形打印二叉树，在分行打印的基础上添加一个记录本层顺序的值，之前打印的地方换成压到一个列表"""
+        if not self.root:
+            return
+        res = [] # 存放层次遍历序列
+        queue = [self.root]
+        to_be_printed = 1
+        next_level_num = 0
+        level_nums = [to_be_printed]  # 存放每一层的节点数
+
+        while queue:
+            node = queue.pop(0)
+            if to_be_printed > 0:
+                res.append(node.elem)
+                to_be_printed -= 1
+            else:
+                to_be_printed = next_level_num
+                level_nums.append(next_level_num)
+                next_level_num = 0
+                res.append(node.elem)
+                to_be_printed -= 1
+            if node.lchild:
+                queue.append(node.lchild)
+                next_level_num += 1
+            if node.rchild:
+                queue.append(node.rchild)
+                next_level_num += 1
+
+        for i, nums in enumerate(level_nums):
+            if i % 2 == 0:
+                for _ in range(nums):
+                    print(res.pop(0), end=" ")
+                print()
+            else:
+                temp = []
+                for _ in range(nums):
+                    temp.append(res.pop(0))
+                for j in range(len(temp)-1, -1, -1):
+                    print(temp[j], end=" ")
+                print()
+        return
 
 
 
