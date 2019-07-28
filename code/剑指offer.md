@@ -2020,7 +2020,56 @@ class Solution:
             new_head = new_head.next
         return p_head
 ```
+面试题36：二叉搜索树和双向链表
 
+>输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
+```python
+#-*- coding:utf-8 -*-
+#class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def Convert(self, pRootOfTree):
+        # write code here
+        """
+        难点在于不能创建任何新的节点，只能调整节点指针的指向
+        递归地处理左子树、根节点和右子树的指针
+        """
+        if not pRootOfTree:
+            return None
+        if not pRootOfTree.left and not pRootOfTree.right:
+            return pRootOfTree
+
+        # 处理左子树
+        self.Convert(pRootOfTree.left)
+        left = pRootOfTree.left
+
+        # 连接左子树的最大节点和跟节点
+        if left:
+            while left.right:
+                left = left.right
+            pRootOfTree.left, left.right = left, pRootOfTree
+
+        # 处理右子树
+        self.Convert(pRootOfTree.right)
+        right = pRootOfTree.right
+
+        # 连接右子树的最小节点和根节点
+        if right:
+            while right.left:
+                right = right.left
+            pRootOfTree.right, right.left = right, pRootOfTree
+
+        # 找到最小的节点
+        while pRootOfTree.left:
+            pRootOfTree = pRootOfTree.left
+        return  pRootOfTree
+```
+
+**注意，IDE和牛客相互复制有时会有缩进的问题**
 
 # 面试题39：数组中出现次数超过一半的数字
 
