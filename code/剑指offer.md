@@ -2071,6 +2071,45 @@ class Solution:
 
 **注意，IDE和牛客相互复制有时会有缩进的问题**
 
+# 面试题37：序列化二叉树
+
+>请实现两个函数，分别用来序列化和反序列化二叉树。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    flag = -1
+    def Serialize(self, root):
+        # write code here
+        if not root:
+            return "#"
+        return str(root.val) + ',' + self.Serialize(root.left) + ',' + self.Serialize(root.right)
+
+    def Deserialize(self, s):
+        # write code here
+        self.flag += 1
+
+        l = s.split(",")
+        if self.flag >= len(s):  # 为什么终止条件是len(s)？
+            return None
+
+        root = None
+        if l[self.flag] != "#":
+            root = TreeNode(int(l[self.flag]))
+            root.left = self.Deserialize(s)
+            root.right = self.Deserialize(s)
+        return root
+```
+
+
+
+
+
 # 面试题39：数组中出现次数超过一半的数字
 
 题目：数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。例如输入一个长度为9的数组{1,2,3,2,2,2,5,4,2}。由于数字2在数组中出现了5次，超过数组长度的一半，因此输出2。  
