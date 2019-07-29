@@ -2165,6 +2165,16 @@ class Solution:
         for i in range(len(ss)):
             self.per(ss[:i] + ss[i+1:], res, path+ss[i])# 注意对于一个长度为n的字符串a,a[n]会报错，但是a[n:]是""   
 ```
+```python
+# -*- coding:utf-8 -*-
+import itertools
+class Solution:
+    def Permutation(self, ss):
+        # write code here
+        if not ss:
+            return []
+        return sorted(list(set(map(''.join, itertools.permutations(ss)))))
+```
 
 # 面试题39：数组中出现次数超过一半的数字
 
