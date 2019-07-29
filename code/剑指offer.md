@@ -2277,3 +2277,163 @@ class Solution:
 ```
 
 解法2：基于partition函数。只有当可以改变数组时用，时间复杂度为O(n)。
+
+
+# 面试题41：数据流中的中位数
+
+>如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。
+如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。我们使用Insert()方法读取数据流，使用GetMedian()方法获取当前读取数据的中位数。
+
+解法1：使用数组，直接插入O(1)，排序然后求中位数O(nlogn).
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    arr = []
+
+    def Insert(self, num):
+        # write code here
+        self.arr.append(num)
+
+    def GetMedian(self, data):
+        # write code here
+        self.arr.sort()
+        length = len(self.arr)
+        if length == 0:
+            return None
+        elif length == 1:
+            return self.arr[0]
+        elif length % 2 == 1:
+            return self.arr[(length - 1) // 2]
+        else:
+            return (self.arr[(length - 1) // 2] + self.arr[length // 2]) / 2.
+```
+解法2：还是使用数组，直接插入O(1)，使用O(n)的时间复杂度求中位数。**使用partition的方法可以用O(n)的时间复杂度从一个数组中找到第k大的元素**
+
+**从数组中找第k小的元素**
+```python
+def partition(num, low, high):
+    pivot = num[low]
+    while low < high:
+        while low < high and num[high] > pivot:
+            high -= 1
+        while low < high and num[low] < pivot:
+            low += 1
+        num[low], num[high] = num[high], num[low]
+    num[low] = pivot
+    return low
+
+def quick_sort(num, low, high):
+    if low < high:
+        location = partition(num, low, high)
+        quick_sort(num, low, location - 1)
+        quick_sort(num, location + 1, high)
+    return num
+def find_kth(num, low, high, k): # 找到从小到大第k个数（序号从0开始）
+    index = partition(num, low, high)
+    if index == k:
+        return num[index]
+    if index < k:
+        return find_kth(num, index+1, high, k)
+    else:
+        return find_kth(num, low, index - 1, k)
+
+num = [4,3,1,5,6,2]
+print(quick_sort(num, 0, len(num)-1))
+print(find_kth(num, 0, len(num)-1, 3))
+```
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    arr = []
+
+    def Insert(self, num):
+        # write code here
+        self.arr.append(num)
+
+    def GetMedian(self):  # 牛客网上这里需要多写一个参数，但是无意义
+        # write code here
+        l = len(self.arr)
+        if l == 0:
+            return None
+        if l == 1:
+            return self.arr[0]
+        if l % 2 == 0:
+            return (self.find_kth(self.arr, 0, l-1, (l-1)//2) + self.find_kth(self.arr, 0, l-1, l//2))/ 2.
+        if l % 2 == 1:
+            return self.find_kth(self.arr, 0, l-1, (l-1)//2)
+
+    def partition(self, num, low, high):
+        pivot = num[low]
+        while low < high:
+            while low < high and num[high] > pivot:
+                high -= 1
+            while low < high and num[low] < pivot:
+                low += 1
+            num[low], num[high] = num[high], num[low]
+        num[low] = pivot
+        return low
+    def find_kth(self, num, low, high, k):
+        index = self.partition(num, low, high)
+        if index == k:
+            return num[index]
+        if index < k:
+            return self.find_kth(num, index+1, high, k)
+        if index > k:
+            return self.find_kth(num, low, index-1, k)
+
+
+s = Solution()
+s.Insert(5)
+print(s.GetMedian())
+s.Insert(2)
+print(s.GetMedian())
+s.Insert(3)
+print(s.GetMedian())
+s.Insert(4)
+print(s.GetMedian())
+s.Insert(1)
+print(s.GetMedian())
+s.Insert(6)
+print(s.GetMedian())
+s.Insert(7)
+print(s.GetMedian())
+```
+
+解法3：最大堆和最小堆。插入O(logn)，查询中位数O(1)。
+
+# 面试题42：连续子数组的最大和
+
+>HZ偶尔会拿些专业问题来忽悠那些非计算机专业的同学。今天测试组开完会后,他又发话了:在古老的一维模式识别中,
+常常需要计算连续子向量的最大和,当向量全为正数的时候,问题很好解决。但是,如果向量中包含负数,是否应该包含某个负数,
+并期望旁边的正数会弥补它呢？例如:{6,-3,-2,7,-15,1,2,2},连续子向量的最大和为8(从第0个开始,到第3个为止)。给一个数组，
+返回它的最大连续子序列的和，你会不会被他忽悠住？(子向量的长度至少是1)
+
+分析：枚举法比较直观，对于一个长度为n的数组，总共有n(n+1)/2个子数组。计算出所有子数组的和，最快也要O(n^2)时间。这个方法是通不过面试的。
+
+解法：**动态规划。如果以f(i)表示第i个数字结尾的子数组的最大和，那么我们最终求的是max(f(i))。如果i=0或者f(i-1)<0，那么f(i)就等于第i个数；
+如果i不等于0且f(i-1)>0，那么f(i)=f(i-1) + 第i个数**
+
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def FindGreatestSumOfSubArray(self, array):
+        # write code here
+        if not array:
+            return None
+        if len(array) == 1:
+            return array[0]
+        max_sum, cur_sum = -0xffffff, 0
+        for i in array:
+            if cur_sum <= 0:
+                cur_sum = i
+            else:
+                cur_sum += i
+            if max_sum <= cur_sum:
+                max_sum = cur_sum
+        return max_sum
+```
+
+
+
