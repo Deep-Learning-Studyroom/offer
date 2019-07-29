@@ -2137,7 +2137,34 @@ class Solution:
         return max(left+1, right+1)
 ```
 
+# 面试题38：字符串的排列
 
+>输入一个字符串,按字典序打印出该字符串中字符的所有排列。例如输入字符串abc,则打印出由字符a,b,c所能排列出来的所有字符串abc,acb,bac,bca,cab和cba。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def Permutation(self, ss):
+        # write code here
+        """
+        把复杂问题分解为小问题，递归
+        把整个字符串分成两部分：第0个字符和后面所有的字符，
+        第一步求所有可能在第一个位置的字符，
+        第二步固定第一个字符，求后面所有字符的排列
+        """
+        if not ss:
+            return []
+        res = []
+        self.per(ss, res, "")
+        unique = list(set(res))
+        return sorted(unique)
+        
+    def per(self, ss, res, path):
+        if ss == "":
+            res.append(path)
+        for i in range(len(ss)):
+            self.per(ss[:i] + ss[i+1:], res, path+ss[i])# 注意对于一个长度为n的字符串a,a[n]会报错，但是a[n:]是""   
+```
 
 # 面试题39：数组中出现次数超过一半的数字
 
