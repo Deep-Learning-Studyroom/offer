@@ -2182,41 +2182,98 @@ class Solution:
 
 解法1： 从数组的特点出发，只需要在遍历数组时保存两个数，一个是数组中的一个数，一个是次数。当遍历到下一个数字时，如果次数为0，则把当前的数字赋值给保存的数字，并把次数置为1，如果下一个数字和之前保存的数字相同，则次数加一，否则次数减一。
 ```python
-def more_than_half_num(num):
-    result = num[0]
-    times = 0
-    for i in num:
-        if times == 0:
-            result = i
-            times = 1
-        elif result == i:
-            times += 1
+# -*- coding:utf-8 -*-
+class Solution:
+    def MoreThanHalfNum_Solution(self, numbers):
+        # write code here
+        """
+        次数超过一半
+        可以通过一个flag和临时的value来记录遍历一次的结果，
+        如果当前的flag是0，那么直接赋值给value，同时flag+=1
+        如果当前flag不是0，那么比较value和当前值，相等则flag+=1，
+        不相等则flag-=1
+        最后如果flag>0并且value的次数大于一半的长度，则返回value的值；
+        否则返回0
+        """
+        if not numbers:
+            return 0
+        value = 0
+        flag = 0
+        for i in numbers:
+            if flag == 0:
+                value = i
+                flag = 1
+            elif i == value:
+                flag += 1
+            else:
+                flag -= 1
+        if flag > 0 and self.check_more_than_half(numbers, value):
+            return value
         else:
-            times -= 1
-    return result
+            return 0
+    def check_more_than_half(self, numbers, value):
+        times = 0
+        for i in numbers:
+            if i == value:
+                times += 1
+        if times > len(numbers) / 2:
+            return True
+        else:
+            return False
+            
 ```
 
-# 面试题40：无序数组里最大的k个数
+
+
+# 面试题40：最小的k个数
 
 **这个题绝对是高频题，很多面经里面都提到了** 
 
-解法1：当我们可以修改输入的数组时，使用partition函数可以做到时间复杂度为O(n)。
+解法1：:维护一个小顶堆，时间复杂度O((n-k)logk + klogk) = O(nlogk)。适合处理海量数据
 
-解法2：当处理海量数据时，我们一般不能修改输入的数组，此时可以用**维护一个小顶堆**的方法。时间复杂度为O(nlog(k))。
-
-解法2代码  
 ```python
-from heapq import *
-def kth_largest(num, k):
-    if len(num) < k:
-        raise ValueError
-    heap = num[:k]
-    heapify(heap) # 默认是小顶堆
-    for i in num[k:]:
-        if i <= heap[-1]:
-            pass
-        else:
-            heappop(heap)
-            heappush(heap, i)
-    return heap
+# -*- coding:utf-8 -*-
+import heapq
+class Solution:
+    def GetLeastNumbers_Solution(self, tinput, k):
+        # write code here
+        """
+        由于默认的是小顶堆，因此先乘以-1，求最大的K个数，
+        维护一个小顶堆，
+        最后得到的结果再乘以-1，然后快排一下，返回
+        """
+        if len(tinput) < k or k == 0:   # 不要忘了k=0的时候
+            return []
+        if len(tinput) == k:
+            return self.quick_sort(tinput)  # 注意这里要排序不要忘了
+        tinput = [-1 * x for x in tinput] # 下面求最大的k个数，每个数和小顶堆的顶元素比较
+        heap = tinput[:k]
+        heapq.heapify(heap)
+        for x in tinput[k:]:
+            if x > heap[0]:
+                heapq.heappop(heap)
+                heapq.heappush(heap, x)
+        return self.quick_sort([-1 * val for val in heap])
+    def quick_sort(self, nums):
+        if len(nums) <= 1:
+            return nums
+        mid_val = nums[0]
+        below = [x for x in nums[1:] if x <= mid_val]
+        above = [x for x in nums[1:] if x > mid_val]
+        return self.quick_sort(below) + [mid_val] + self.quick_sort(above)
 ```
+解法2：最小堆，时间复杂度O(klogn)。每次用堆排序求出最小值，保存然后pop，重复k次。
+
+```python
+# -*- coding:utf-8 -*-
+import heapq
+ 
+class Solution:
+    def GetLeastNumbers_Solution(self, tinput, k):
+        if not tinput or not k or k > len(tinput):
+            return []
+        heapq.heapify(tinput)
+        return [heapq.heappop(tinput) for _ in range(k)]
+```
+
+解法2：基于partition函数。只有当可以改变数组时用，时间复杂度为O(n)。
