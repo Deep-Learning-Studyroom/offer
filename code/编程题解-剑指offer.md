@@ -61,10 +61,6 @@ if __name__ == '__main__':
 
 # <a href="https://www.nowcoder.com/practice/f78a359491e64a50bce2d89cff857eb6?tpId=13&tqId=11199&tPage=3&rp=3&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking">孩子们的游戏</a>
 
-
-
-
-
 一个环，由n个顺序数字组成（0 ~ n-1），任给一个数字m，从0开始往环的前向走，将第m-1个数字移出队伍。然后从这个数字的后一个数字起再移出它后面的第m-1个数字。直到这个环只剩一个数字时，输出这个数字。
 
 ```python
@@ -592,7 +588,35 @@ class Solution:
         return array
 ```
 
+# 链表中倒数第k个节点
 
+设两个指针p1、p2， p1先向前移动k-1步，然后同时移动p1、p2，直到p1移动到最后一位，这样p2所在节点就是链表倒数第k个节点。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def FindKthToTail(self, head, k):
+        # write code here
+        if head is None:
+            return None
+        if k <= 0:
+            return None
+        p1 = head
+        p2 = head
+        for _ in range(k-1):
+            if p1.next is None:
+                return None
+            p1 = p1.next
+        while p1.next is not None:
+            p1 = p1.next
+            p2 = p2.next
+        return p2
+```
 
 
 
