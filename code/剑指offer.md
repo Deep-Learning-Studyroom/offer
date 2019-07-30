@@ -2475,3 +2475,32 @@ class Solution:
             m *= 10
         return ones
 ```
+
+面试题44：数字序列中某一位的数字
+
+>数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从0开始计数）是5，第13位是1，第19位是4，等等。
+请写一个函数，求任意第n位对应的数字。
+
+解法1：从0开始逐一枚举数字，并把该数字的长度加进来，如果总长度大于等于n，那么第n位对应的数字就在这个数的某一位。
+```python
+def digit_at_index(n):
+    if n < 0:
+        return None
+    if n == 0:
+        return 0
+    i = 0
+    total_len = 0
+    while total_len < n:
+        i += 1
+        total_len += len(str(i))
+
+    print(i, total_len, n, end=" ")
+    return int(str(i)[-1 - (total_len - n)])  # 注意这里的索引
+
+print(digit_at_index(0))  # 0
+print(digit_at_index(5))  # 5
+print(digit_at_index(10)) # 1
+print(digit_at_index(13)) # 1
+print(digit_at_index(19)) # 4
+```
+
