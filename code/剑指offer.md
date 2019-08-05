@@ -2666,7 +2666,7 @@ longest_substring_without_duplication('arabcacfr')
 >把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。
 求按从小到大的顺序的第N个丑数。
 
-# 解法1：逐个判断每个整数是不是丑数，知道第n个截止。缺点：每个整数都需要计算，即使一个数不是丑数也需要对它进行取余数和除法操作。因此算法
+解法1：逐个判断每个整数是不是丑数，知道第n个截止。缺点：每个整数都需要计算，即使一个数不是丑数也需要对它进行取余数和除法操作。因此算法
 的时间效率不高。
 
 ```python
@@ -2726,7 +2726,38 @@ print(s.GetUglyNumber_Solution(20))
 print(s.GetUglyNumber_Solution(1500)) # 859963392
 ```
 
+# 面试题50：第一个只出现一次的字符
 
+## 题目一：字符串中第一个只出现一次的字符
+
+>在字符串中找出第一个只出现一次的字符。如输入"abaccdeff"，则输出'b'。
+
+解法：哈希表法，两次遍历，时间复杂度O(n)
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def FirstNotRepeatingChar(self, s):
+        # write code here
+        if not s:
+            return -1
+        dic = {}
+        for val in s:
+            if val not in dic:
+                dic[val] = 1
+            else:
+                dic[val] += 1
+        for i, val in enumerate(s):
+            if dic[val] == 1:
+                return i
+```
+
+## 题目二：字符流中第一个只出现一次的字符
+
+>请实现一个函数，用来找出字符流中第一个只出现一次的字符。例如，当从字符流中只读出前两个字符"go"时，第一个只出现一次的字符是"g"；当从
+该字符流中读出前6个字符"google"时，第一个只出现一次的字符是"l"。
+
+解法：同样是哈希表。
 
 
 
