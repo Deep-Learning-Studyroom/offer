@@ -2661,3 +2661,92 @@ f(i) = f(i-1) + 1。
 longest_substring_without_duplication('arabcacfr')
 ```
 
+# 面试题49：丑数
+
+>把只包含质因子2、3和5的数称作丑数（Ugly Number）。例如6、8都是丑数，但14不是，因为它包含质因子7。 习惯上我们把1当做是第一个丑数。
+求按从小到大的顺序的第N个丑数。
+
+# 解法1：逐个判断每个整数是不是丑数，知道第n个截止。缺点：每个整数都需要计算，即使一个数不是丑数也需要对它进行取余数和除法操作。因此算法
+的时间效率不高。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def GetUglyNumber_Solution(self, index):
+        # write code here
+        count = 1
+        i = 1
+        while count < index:
+            i += 1
+            if self.is_ugly(i):
+                count += 1
+        return i
+    def is_ugly(self, num):
+        while(num % 2 == 0):
+            num = num // 2
+        while(num % 3 == 0):
+            num = num // 3
+        while(num % 5 == 0):
+            num = num // 5
+        return num == 1
+s = Solution()
+print(s.GetUglyNumber_Solution(6))
+print(s.GetUglyNumber_Solution(1500))
+```
+
+解法2：创建数组保存已经找到的丑数，用空间换时间。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def GetUglyNumber_Solution(self, index):
+        # write code here
+        if index <= 0:
+            return 0
+        ugly_list = [1]
+        index_2 = 0
+        index_3 = 0
+        index_5 = 0
+        for i in range(index - 1):
+            #print(index_2, index_3, index_5)
+            new_ugly = min(ugly_list[index_2] * 2, ugly_list[index_3] * 3, ugly_list[index_5] * 5)
+            ugly_list.append(new_ugly)
+            if new_ugly % 2 == 0:
+                index_2 += 1
+            if new_ugly % 3 == 0:
+                index_3 += 1
+            if new_ugly % 5 == 0:
+                index_5 += 1
+
+        return ugly_list[-1]
+
+
+s = Solution()
+print(s.GetUglyNumber_Solution(20))
+print(s.GetUglyNumber_Solution(1500)) # 859963392
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
