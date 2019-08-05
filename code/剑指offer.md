@@ -2623,3 +2623,41 @@ def get_max_value(values, rows, cols): # value是一维的
 get_max_value([1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,5], 4, 4)
 ```
 
+# 面试题48：最长不含重复字符的子字符串
+
+>给定一个字符串，找到最长的子字符串的长度而不重复字符
+
+解法：暴力求解法复杂度分析。一个长度为n的数组，子数组的数量为O(n^2)，即n + (n-1) + ... + 1，然后对于每个子数组要判断是否有重复
+字符，O(n)，总体上是O(n^3)的时间复杂度。使用动态规划法提高效率。定义函数f(i)表示第i个字符结尾的不包含重复字符的子字符串的长度。
+分类讨论f(i)的计算：如果第i个字符之前没有出现过，那么f(i) = f(i-1) + 1；如果第i个字符之前出现过，那么计算i和第i个字符上次出现在
+字符串中的位置的距离d。如果d <= f(i-1)，那么说明第i个字符上次出现的位置是f(i-1)对应的最长子字符串中，且两个所夹的子字符串没有
+其他重复的字符了。因此f(i) = d；如果d > f(i-1)，那么说明第i个字符上次出现在f(i-1)对应的最长子字符串之前，因此仍然有
+f(i) = f(i-1) + 1。
+
+```python
+ def longest_substring_without_duplication(s):
+    if len(s) <= 1:
+        return len(s)
+    position = [-1] * 26
+    cur_len = 0
+    max_len = 0
+
+    for i, val in enumerate(s):
+        d = i - position[ord(val) - ord('a')]
+        if d > cur_len: # 第i个字符之前没有出现过和第i个字符之前出现过且
+                                                          # d > f(i-1)(i和第i个字符上次出现在字符串中的位置的距离d)
+            cur_len += 1
+        else:
+            if cur_len > max_len:
+                max_len = cur_len
+            cur_len = d
+        position[ord(val) - ord('a')] = i
+
+    if cur_len > max_len:
+        max_len = cur_len
+    print(max_len)
+    return max_len
+
+longest_substring_without_duplication('arabcacfr')
+```
+
