@@ -2565,3 +2565,61 @@ print(s.numDecodings("12258"))
 print(s.numDecodings("12"))
 ```
 
+# 面试题47：礼物的最大价值
+
+>在一个mxn的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或
+向下移动一格，知道到达棋盘的右下角。给定一个棋盘及其上面的礼物，请计算你最多能拿到多少价值的礼物？
+
+解法：**典型的动态规划问题**。先用递归分析，定义一个函数f(i,j)表示到达坐标为(i,j)的格子时能拿到的礼物总和的最大值。
+f(i,j) = max(f(i-1, j), f(i, j-1)) + gift[i, j]。gift[i, j]表示坐标为(i,j)的格子里礼物的价值。由于递归的代码有大量重复的计算，
+因此要写基于循环的代码。**使用一个辅助的二维数组，数组中坐标(i,j)的元素表示到达坐标(i,j)的格子时能拿到的礼物价值总和的最大值**
+
+```python
+def get_max_value(values, rows, cols): # value是一维的
+    if len(values) == 0:
+        return 0
+
+    max_values = [[0] * cols] * rows
+
+    for i in range(0, rows):
+        for j in range(0, cols):
+            left = 0
+            up = 0
+            if i > 0:
+                up = max_values[i-1][j]
+            if j > 0:
+                left = max_values[i][j-1]
+            max_values[i][j] = max(up, left) + values[i * cols + j]
+
+    max_val = max_values[rows - 1][cols - 1]
+    print(max_val)
+    return max_val
+get_max_value([1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,5], 4, 4)
+```
+
+解法二：优化上面的代码。由于每次计算时只需要左边和上边的max_value，那么不需要存储一个二维数组，只需要一个一维数据（长度等于列数）
+即可。
+
+```python
+def get_max_value(values, rows, cols): # value是一维的
+    if len(values) == 0:
+        return 0
+
+    max_values = [0] * cols
+
+    for i in range(0, rows):
+        for j in range(0, cols):
+            left = 0
+            up = 0
+            if i > 0:
+                up = max_values[j]  # 这个在上一行的循环中已经得到了
+            if j > 0:
+                left = max_values[j-1]  # 这个在上一列的循环中得到的
+            max_values[j] = max(up, left) + values[i * cols + j]
+
+    max_val = max_values[-1]
+    print(max_val)
+    return max_val
+get_max_value([1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,5], 4, 4)
+```
+
