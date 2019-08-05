@@ -2504,3 +2504,64 @@ print(digit_at_index(13)) # 1
 print(digit_at_index(19)) # 4
 ```
 
+# 面试题45：把数组排成最小的数
+
+>输入一个正整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+例如输入数组{3，32，321}，则打印出这三个数字能排成的最小数字为321323。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def PrintMinNumber(self, numbers):
+        # write code here
+        if len(numbers) == 0:
+            return ""
+
+        numbers_str = list(map(str, numbers))
+        res = self.sort(numbers_str)
+        print(numbers)
+        print(numbers_str)
+        print(res)
+        temp = "".join(res)
+        #print(temp)
+        return int(temp)
+
+    def sort(self, s):
+        if len(s) == 0 or len(s) == 1:
+            return s
+        temp = s[0]
+        bf = []
+        af = []
+        for i in range(1, len(s)):
+            if temp + s[i] < s[i] + temp:
+                af.append(s[i])
+            else:
+                bf.append(s[i])
+        return self.sort(bf) + [temp] + self.sort(af)
+
+s = Solution()
+print(s.PrintMinNumber([3,32,321]))
+```
+
+面试题46：把数字翻译成字符串
+
+> 给定一个数字，我们按照如下规则把它翻译为字符串；0翻译成“a”，1翻译成“b”,…
+11翻译成“l”,…,25翻译成“z”.一个数字可能有多个翻译。例如，12258有5种不同的翻译，
+分别是“bccfi” “bwfi” “bczi” “mcfi” “mzi” 请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+
+分析：递归的思路。定义f(i)表示从第i位数字开始的不同翻译数目，那么f(i) = f(i+1) + g(i, i+1)*f(i+2)。如果第i位和第i+1位两位数字
+拼起来的数字在10~25范围内，函数g(i, i+1)的值为1，否则为0。**但是递归重复子问题，效率不高，因此要写基于循环的代码**
+
+```python
+class Solution:
+    def numDecodings(self, s):
+        pp, p = 1, int(s[0] != '0')
+        for i in range(1, len(s)):
+            pp, p = p, pp * (0 <= int(s[i-1:i+1]) <= 25) + p
+        return p
+
+s = Solution()
+print(s.numDecodings("12258"))
+print(s.numDecodings("12"))
+```
+
