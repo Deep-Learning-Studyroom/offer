@@ -2801,10 +2801,50 @@ class Solution:
         return count%1000000007
 ```
 
+# 面试题52：两个链表中的第一个公共节点
 
+>输入两个链表，找出它们的第一个公共节点。
+
+解法一：暴力法。在第一个链表上遍历每个节点，然后在第二个链表上遍历每个节点，如果两个节点相同，则返回该节点。时间复杂度O(nm)。
+
+解法二：空间换时间。由于是单链表，所以从第一个公共节点开始，后面的部分是重合的。因此从每个链表的最后一个节点开始，往前遍历，如果遇到最后一个
+相同的节点，那么该节点就是第一个公共节点。具体实现上是使用两个栈，存储每个链表的所有节点，然后不断比较栈顶元素。时间复杂度O(n+m)，
+空间复杂度O(n+m)。
+
+解法三：解法二之所以要用栈，是因为我们要从后面往前遍历；之所以要从后往前遍历，是因为两个链表的节点数可能不一样。因此可以先遍历一下两个
+链表，得到各自的节点数。然后让长的那个链表的head指针先走节点数差值次。然后两个指针一起往后走，第一次遇到相同的节点就是第一个公共节点。
+
+```python
+# -*- coding:utf-8 -*-
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+class Solution:
+    def FindFirstCommonNode(self, pHead1, pHead2):
+        # write code here
+        if pHead1 is pHead2:
+            return pHead1
+        num1 = 0
+        num2 = 0
+        temp = pHead1
+        while temp is not None:
+            num1 += 1
+            temp = temp.next
+        temp = pHead2
+        while temp is not None:
+            num2 += 1
+            temp = temp.next
+        if num1 > num2:
+            for _ in range(num1 - num2):
+                pHead1 = pHead1.next
+            while True:
+                if pHead1 is pHead2:
+                    return pHead1
+                pHead1 = pHead1.next
+                pHead2 = pHead2.next
+```
 # 面试题67：把字符串转成整数
-
-
 
 ```python
 # -*- coding:utf-8 -*-
@@ -2832,6 +2872,8 @@ class Solution:
             res = res * 10 + int(val)
         return res
 ```
+
+
 
 
 
