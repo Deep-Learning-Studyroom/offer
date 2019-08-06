@@ -1,5 +1,29 @@
 # python 基础语法 
 - python中的“不等于None”不能写"!=None"，要写"is not None"
+
+**python中is比较的是两个对象的内存地址，而==是调用类的__eq__函数比较的。而且在python里面，只要是None内存地址都是一样的，因此用
+is比较最准确。用==的话，会根据具体的__eq__函数确定结果**。比如下面的代码：
+```
+In [2]: class Student:
+   ...:     def __eq__(self, other):
+   ...:         return True
+   ...:
+
+In [3]: s = Student()
+
+In [4]: s is None
+Out[4]: False
+
+In [5]: s == None
+Out[5]: True
+
+In [6]: id(s)
+Out[6]: 2636099000136
+
+In [7]: id(None)
+Out[7]: 1471456400
+```
+
 - if a is not None 和 if a的区别？
 
 ## 深拷贝和浅拷贝
