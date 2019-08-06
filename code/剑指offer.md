@@ -2760,7 +2760,78 @@ class Solution:
 解法：同样是哈希表。
 
 
+# 面试题51：数组中的逆序对
 
+>在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。
+并将P对1000000007取模的结果输出。 即输出P%1000000007
+
+解法：两次循环，外层循环遍历每个数字，内层循环遍历这个数字后面的数字。时间复杂度O(n^2)，这个代码写出来基本上面试就凉了。
+
+
+解法2：归并排序。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def InversePairs(self, data):
+        global count
+        count=0
+        def A(array):
+            global count
+            if len(array)<=1:
+                return array
+            k=int(len(array)/2)
+            left=A(array[:k])
+            right=A(array[k:])
+            l=0
+            r=0
+            result=[]
+            while l<len(left) and r<len(right):
+                if left[l]<right[r]:
+                    result.append(left[l])
+                    l+=1
+                else:
+                    result.append(right[r])
+                    r+=1
+                    count+=len(left)-l
+            result+=left[l:]
+            result+=right[r:]
+            return result
+        A(data)
+        return count%1000000007
+```
+
+
+# 面试题67：把字符串转成整数
+
+
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def StrToInt(self, s):
+        # write code here
+        if len(s) == 0:
+            return 0
+        dic = {str(i): i for i in range(10)}
+        if s[0] != '+' and s[0] != '-' and s[0] not in dic:
+            return 0
+        for val in s[1:]:
+            if val not in dic:
+                return 0
+        if s[0] == "+":
+            return self.str_to_int(s[1:])
+        elif s[0] == "-":
+            return -1 * self.str_to_int(s[1:])
+        else:
+            return self.str_to_int(s)
+    
+    def str_to_int(self, s):
+        res = 0
+        for val in s:
+            res = res * 10 + int(val)
+        return res
+```
 
 
 
