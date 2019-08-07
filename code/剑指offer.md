@@ -3003,8 +3003,104 @@ class Solution:
         self.middle_traverse(pRoot.right)
 ```
 
+# 面试题55：二叉树的深度
 
+## 题目一：二叉树的深度
 
+>输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。
+
+解法1：找到树的所有路径，然后返回最大的长度值。代码量比较大，不够简洁。
+
+解法2：递归的做法。如果一棵树根节点为None，那么深度为0；否则，这棵树的深度等于max(左子树深度,右子树深度) + 1.
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def TreeDepth(self, pRoot):
+        # write code here
+        if pRoot is None:
+            return 0
+        left = self.TreeDepth(pRoot.left)
+        right = self.TreeDepth(pRoot.right)
+        if left > right:
+            return left + 1
+        else:
+            return right + 1
+```
+
+## 题目二：平衡二叉树
+
+>输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+
+解法1：如果根节点不为None，那么判断其左右子树深度的差的绝对值是不是小于等于1，如果不是，则返回False；如果是，则返回其左子树和
+右子树的判断结果相与之后的值。代码简洁但是效率不高，因为一个节点会被重复遍历多次。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def IsBalanced_Solution(self, pRoot):
+        # write code here
+        """
+        它是一棵空树或它的左右两个子树的高度差的绝对值不超过1，
+        并且左右两个子树都是一棵平衡二叉树
+        """
+        if not pRoot:
+            return True
+        if abs(self.TreeDepth(pRoot.left) - self.TreeDepth(pRoot.right)) > 1:
+            return False
+        return self.IsBalanced_Solution(pRoot.left) and self.IsBalanced_Solution(pRoot.right)
+    
+    def TreeDepth(self, root):
+        if not root:
+            return 0
+        left = self.TreeDepth(root.left)
+        right = self.TreeDepth(root.right)
+        
+        return max(left+1, right+1)
+```
+
+解法2：对上面的算法进行优化。在计算深度时判断是否为平衡二叉树，如果不是则直接返回-1；如果是则继续。在主函数里调用获取深度的函数，
+如果得到的不是-1，那么是平衡二叉树，否则不是平衡二叉树。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    
+    def IsBalanced_Solution(self, pRoot):
+        # write code here
+        if pRoot is None:
+            return True
+        return self.get_depth(pRoot) != -1
+    
+    def get_depth(self, pRoot):
+        if pRoot is None:
+            return 0
+        left = self.get_depth(pRoot.left)
+        if left == -1:
+            return -1
+        right = self.get_depth(pRoot.right)
+        if right == -1:
+            return -1
+        if abs(left - right) > 1:
+            return -1
+        else:
+            return max(left+1, right+1)
+```
 
 
 
