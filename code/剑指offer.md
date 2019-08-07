@@ -2844,6 +2844,129 @@ class Solution:
                 pHead1 = pHead1.next
                 pHead2 = pHead2.next
 ```
+
+# 面试题53：在排序数组中查找数字
+
+## 题目一：数字在排序数组中出现的次数
+
+>统计一个数字在排序数组中出现的次数。例如，输入排序数组{1,2,3,3,3,3,4,5}和数字3，由于3在这个数组中出现了4次，因此输出4.
+
+解法1：顺序遍历统计次数，时间复杂度O(n)，不好。
+
+解法2：因为是排序数组中的查找，因此使用二分查找。找到某个目标数字，然后在其左右两边扫描统计该数字的次数。因为要查找的数字出现的
+次数可能是n，因此时间复杂度O(n)，和上一个一样，不好。
+
+解法3：二分查找，去上一个方法的区别是直接查找第一个目标数字和最后一个目标数字。时间复杂度O(logn)。如果middle_value小于目标数字，那么第一个目标数字
+在右半段；如果middle_value大于目标数字，那么第一个目标数字在左半段；如果等于目标数字，那么查看middle_value的前一个数字是否等于
+目标数字，如果不等于，则middle_value是第一个目标数字，如果等于，则middle_value在右半段。上面的分析，目标数字在左半段，则
+把right指针移到middle_value的位置；反之把left指针移到middle_value的位置。查找最后一个数字同理。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def GetNumberOfK(self, data, k):
+        # write code here
+        if len(data) == 0:
+            return 0
+        if len(data) == 1 and data[0] == k:
+            return 1
+        exist = 0
+        first = 0
+        last = 0
+
+        left = 0
+        right = len(data) - 1
+        # find first
+        while (right - left) > 1:
+            middle = (left + right) // 2
+            if data[middle] == k:
+                exist = 1
+                if middle == 0:
+                    first = 0
+                    break
+                else:
+                    if data[middle-1] == k:
+                        right = middle
+                        first = middle - 1
+                    else:
+                        first = middle
+                        break
+            elif data[middle] < k:
+                left = middle
+            else:
+                right = middle
+        print(left,right)
+        # find last
+        left = 0
+        right = len(data) - 1
+        while (right - left) > 1:
+            middle = (left + right) // 2
+            if data[middle] == k:
+                exist = 1
+                if middle == len(data) - 1:
+                    last = len(data) - 1
+                    break
+                else:
+                    if data[middle + 1] == k:
+                        left = middle
+                        last = middle + 1
+                    else:
+                        last = middle
+                        break
+            elif data[middle] < k:
+                left = middle
+            else:
+                right = middle
+        print(left, right)
+        print(first, last)
+        if exist == 1:
+            return last - first + 1
+        else:
+            return 0
+```
+
+## 题目二：0~n-1中缺失的数字
+
+>一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0~n-1内。在范围0~n-1内的n个数字中有且仅有一个数字不在
+数组中，请找出这个数字。
+
+解法分析：直观解法是n(n-1)/2减去数组的和，得到的就是那个缺失的数字。但是时间复杂度是O(n)。分析规律，有且仅有一个缺失的数字，
+因此在缺失数字之前，每个索引对应的值等于索引，在缺失数字之后（包含缺失数字）所有索引对应的数字都不等于索引。只需要二分查找第一个
+索引和值不对应的索引即可。如果中间数字和索引相等，则把left移到middle+1的位置；如果相等且前一个数字和索引也相等，则把right移到
+middle-1的位置；如果相等且前一个数字和索引不相等，那么当前索引是第一个开始不相等的位置，索引值就是缺失值。进入while循环的条件是
+left <= right。
+
+## 题目三：数组中数值和下标相等的元素
+
+>假设一个单调递增的数组里的每个元素都是整数并且是唯一的。请编程实现一个函数，找出数组中任意一个数值等于其下标的元素。例如，在[-3, 
+-1, 1, 3, 5]中，数字3和它的下标相等。
+
+解法分析：最直观的解法还是遍历一遍数组，然后对每个数字判断是否和下标相同。时间复杂度O(n)。由于是单调递增序列，因此可以使用二分查找。
+分析数组的规律知，如果一个数字的值大于它的下标，那么它后面的所有值也都大于下标。因此如果下标middle的数字大于它的下标，那么在其左边
+寻找即可；否则在其右边寻找。
+
+```python
+def get_number_same_as_index(numbers):
+    if len(numbers) == 0:
+        return -1
+    left = 0
+    right = len(numbers) - 1
+    while left <= right:
+        middle = (left + right) // 2
+        #print(left, middle, right)
+        if numbers[middle] == middle:
+           return middle
+        if numbers[middle] > middle:
+            right = middle - 1
+        else:
+            left = middle + 1
+    return -1
+
+print(get_number_same_as_index([-3,-1,1,3,5])) # 3
+print(get_number_same_as_index([0,3,4,5,7])) # 0
+print(get_number_same_as_index([-1,0,1,2,4])) # 4
+```
+
 # 面试题67：把字符串转成整数
 
 ```python
