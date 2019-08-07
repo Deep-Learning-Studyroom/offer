@@ -2967,6 +2967,60 @@ print(get_number_same_as_index([0,3,4,5,7])) # 0
 print(get_number_same_as_index([-1,0,1,2,4])) # 4
 ```
 
+# 面试题54：二叉搜索树的第K大节点
+
+>给定一棵二叉搜索树，请找出其中第K小的节点。
+
+解法分析：实际考察的是对二叉树中序遍历的理解。**如果中序遍历一棵二叉搜索树，那么遍历序列就是递增排序的**。注意返回的是节点，
+而不是节点的值。
+
+```python
+# -*- coding:utf-8 -*-
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+class Solution:
+    def __init__(self):
+        self.arr = []
+    # 返回对应节点TreeNode
+    def KthNode(self, pRoot, k):
+        # write code here
+        if k <= 0 or not pRoot:
+            return None
+        self.middle_traverse(pRoot)
+        if len(self.arr) < k:
+            return None
+        else:
+            return self.arr[k-1]
+        
+    def middle_traverse(self, pRoot):
+        if pRoot is None:
+            return None
+        self.middle_traverse(pRoot.left)
+        self.arr.append(pRoot)
+        self.middle_traverse(pRoot.right)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 面试题67：把字符串转成整数
 
 ```python
