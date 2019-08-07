@@ -2967,7 +2967,7 @@ print(get_number_same_as_index([0,3,4,5,7])) # 0
 print(get_number_same_as_index([-1,0,1,2,4])) # 4
 ```
 
-# 面试题54：二叉搜索树的第K大节点
+# 面试题54：二叉搜索树的第K小节点
 
 >给定一棵二叉搜索树，请找出其中第K小的节点。
 
