@@ -100,3 +100,10 @@ Out[21]: [[5, 2], [3, 4]]
 ## python的输入
 
 [参考网站](https://www.jianshu.com/p/6f14ca3290ee)
+
+
+# python类中的super方法
+
+[Python—子类构造函数调用super().__init__()](https://blog.csdn.net/paopaohll/article/details/83063349)
+
+[详解类class的继承、__init__初始化、super方法](https://blog.csdn.net/brucewong0516/article/details/79121179)
