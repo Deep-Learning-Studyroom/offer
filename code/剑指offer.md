@@ -3250,8 +3250,78 @@ class Solution:
 
 ```
 
+# 面试题60：n个骰子的点数
 
+>把n个骰子仍在地上，所有骰子朝上一面的点数之和为s。输出n，打印出s的所有可能的值出现的概率。
 
+```python
+class Solution:
+    def dices_sum(self, n):
+        # Write your code here
+        if n == 0: return None
+        result = [
+            [1, 1, 1, 1, 1, 1],
+        ]
+        # if n == 1: return result[0]
+        # 计算n个骰子出现的各个次数和
+        for i in range(1, n):
+            x = 5 * (i + 1) + 1
+            result.append([0 for _ in range(x)])
+
+            for j in range(x):
+                if j < 6:
+                    result[i][j] = (sum(result[i - 1][0:j + 1]))
+                elif 6 <= j <= 3 * i + 2:
+                    result[i][j] = (sum(result[i - 1][j - 5:j + 1]))
+                else:
+                    break
+            left = 0
+            right = len(result[i]) - 1
+            while left <= right:
+                result[i][right] = result[i][left]
+                left += 1
+                right -= 1
+
+        res = result[-1]
+        all = float(sum(res))
+        other = []
+        # 第i个元素代表骰子总和为n+i
+        for i, item in enumerate(res):
+            pro = item / all
+            other.append([n + i, pro])
+        return other
+```
+
+# 面试题61：扑克牌中的顺子
+
+>题目：从扑克牌中随机抽五张牌，判断是不是一个顺子，即这五张牌是不是连续的。2~10为数字本身，A为1，J为11，Q为12，K为13，而大小王可以看成
+任意数字。
+
+解法：（1）把数组排序；（2）统计0的个数和相邻数字之间的空缺总数（除了0外相邻数字之间如果相等就返回False）；（3）如果0的个数不少于
+空缺总数，则这个数组就是连续的，反正不连续。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def IsContinuous(self, numbers):
+        # write code here
+        if not numbers:
+            return False
+        numbers.sort()
+        num_0 = 0
+        num_vacancy = 0
+        for i, val in enumerate(numbers):
+            if val == 0:
+                num_0 += 1
+            elif i != 4 and numbers[i+1] != numbers[i]:
+                num_vacancy += (numbers[i+1] - numbers[i] - 1)
+            elif i != 4 and numbers[i+1] == numbers[i]:
+                return False
+        if num_vacancy <= num_0:
+            return True
+        else:
+            return False
+```
 
 
 
