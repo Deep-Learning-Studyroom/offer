@@ -3346,6 +3346,30 @@ class Solution:
             last = (last + m) % i
         return last
 ```
+
+# 面试题63：股票的最大利润
+
+>假设把某股票的价格按照时间先后顺序存储在数组中，请问**买卖该股票一次**可获得的最大利润是多少？
+
+解法：以此扫描数组中的数字，当扫描第i个数字时，只要我们能记住之前i-1个数字中的最小值，然后算出当前价位卖出的最大利润。最后取最大的即可。
+
+```python
+def stock(nums):
+    if not nums or len(nums) == 1:
+        return 0
+    min_val = nums[0]
+    max_diff = nums[1] - min_val
+    for i in range(2, len(nums)):
+        if nums[i-1] < min_val:
+            min_val = nums[i-1]
+        if nums[i] - min_val > max_diff:
+            max_diff = nums[i] - min_val
+    return max_diff
+
+print(stock([9, 11, 8, 5, 7, 12, 16, 14])) # 11
+```
+
+
 # 面试题67：把字符串转成整数
 
 ```python
