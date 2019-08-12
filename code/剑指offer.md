@@ -3323,8 +3323,29 @@ class Solution:
             return False
 ```
 
+# 面试题62：圆圈中最后剩下的数字
+
+>题目：0,1,...,n-1这n个数字排成一个圆圈，从数字0开始，每次从这个圆圈里删除第m个数字。求出这个圆圈里剩下的最后一个数字。
+
+经典解法：环形链表模拟圆圈。创建一个共有n个节点的环形链表，然后每次在这个链表中删除第m个节点。用list模拟环形链表的方法，当扫描到list
+末尾的时候，把它移到头部即可。
+
+最佳解法：要得到n个数字序列中最后剩下的数字，只需要得到n-1个数字的序列中最后剩下的数字，并以此类推。当n=1时，也就是序列只有一个0时，结果
+就是0.f(n, m) = 0 如果n=1；f(n, m) = (f(n-1, m) + m) % n 如果n>1.
 
 
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def LastRemaining_Solution(self, n, m):
+        # write code here
+        if n < 1 or m < 1:
+            return -1
+        last = 0
+        for i in range(2, n+1):
+            last = (last + m) % i
+        return last
+```
 # 面试题67：把字符串转成整数
 
 ```python
