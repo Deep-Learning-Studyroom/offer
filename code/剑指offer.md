@@ -3102,15 +3102,153 @@ class Solution:
             return max(left+1, right+1)
 ```
 
+# 面试题56：和为s的数字
+
+## 题目一：和为s的两个数字
+
+>输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。
+
+解法：哈希表
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def FindNumbersWithSum(self, array, tsum):
+        # write code here
+        if len(array) < 2:
+            return []
+        res = []
+        d = set()
+        for val in array:
+            if tsum - val in d:
+                res.append([tsum - val, val])
+            else:
+                d.add(val)
+        if len(res) == 0:
+            return []
+        min_product = res[0][0] * res[0][1]
+        result = res[0]
+        for l in res:
+            if l[0] * l[1] < min_product:
+                min_product = l[0] * l[1]
+                result = l
+        return result[0], result[1]
+```
+
+## 题目二：和为s的连续正数序列
+
+>小明很喜欢数学,有一天他在做数学作业时,要求计算出9~16的和,他马上就写出了正确答案是100。但是他并不满足于此,他在想究竟有多少种连续的
+正数序列的和为100(至少包括两个数)。没多久,他就得到另一组连续正数和为100的序列:18,19,20,21,22。现在把问题交给你,你能不能也很快的
+找出所有和为S的连续正数序列? Good Luck!  输出所有和为S的连续正数序列。序列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序
+
+```python
+class Solution:
+    def FindContinuousSequence(self, tsum):
+        if tsum < 3:
+            return []
+        small = 1
+        big = 2
+        middle = (tsum + 1)>>1
+        curSum = small + big
+        output = []
+        while small < middle:
+            if curSum == tsum:
+                output.append(list(range(small, big+1))) # 注意python2和3range的区别。python3外面需要加list()。
+                big += 1
+                curSum += big
+            elif curSum > tsum:
+                curSum -= small
+                small += 1
+            else:
+                big += 1
+                curSum += big
+        return output
+print(Solution().FindContinuousSequence(9))
+```
+
+# 面试题58：翻转字符串
+
+## 题目一：翻转单词顺序
+
+>输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student."，
+则输出"student. a am I"。
+
+解法：
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def ReverseSentence(self, s):
+        # write code here
+        if not s:
+            return s
+        l = s.split(" ")
+        l.reverse()
+        res = ""
+        for val in l[:-1]:
+            res += val
+            res += " "
+        res += l[-1]
+        return res
+```
+
+## 题目二：左旋转字符串
+
+>汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，
+请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def LeftRotateString(self, s, n):
+        # write code here
+        if n == 0:
+            return s
+        if not s:
+            return s
+        return s[n:] + s[:n]
+```
+
+# 面试题59：队列的最大值
+
+## 题目一：滑动窗口的最大值
+
+>给定一个数组和滑动窗口的大小，找出所有滑动窗口里数值的最大值。例如，如果输入数组{2,3,4,2,6,2,5,1}及滑动窗口的大小3，
+那么一共存在6个滑动窗口，他们的最大值分别为{4,4,6,6,6,5}； 针对数组{2,3,4,2,6,2,5,1}的滑动窗口有以下6个： {[2,3,4],2,6,2,5,1}，
+ {2,[3,4,2],6,2,5,1}， {2,3,[4,2,6],2,5,1}， {2,3,4,[2,6,2],5,1}， {2,3,4,2,[6,2,5],1}， {2,3,4,2,6,[2,5,1]}。
+
+解法：双端队列。用一个叫window的队列存储当前滑动窗口中可能是最大值的索引。首先用一个while循环把窗口范围之前的值去掉，然后删除掉window中
+对应值小于当前值的那些值（因为先要要append进来的值比他们来得晚而且还比他们大，因此那些值永远无出头之日，删掉即可）。然后把当前值添加
+到window中。每次把window中的第0个元素在num中的值添加到res中。最后返回res即可。
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def maxInWindows(self, num, size):
+        # write code here
+        if len(num) < size or size < 1:
+            return []
+        res = []
+        window = []  # index of val in window
+        for i, val in enumerate(num):
+            while len(window) >= 1 and i >= size and window[0] <= i - size:  # 满足则从队列前面删除
+                window.pop(0)
+            while len(window) >= 1 and val >= num[window[-1]]:  # 满足则从队列后面删除
+                window.pop(-1)
+            window.append(i)
+            if i >= size - 1:
+                res.append(num[window[0]])
+        return res
+```
+
+## 题目二：队列的最大值
+
+>定义一个队列并实现函数max得到队列里的最大值，要求函数max、push_back和push_font的时间复杂度都是O(1)
 
 
+```python
 
-
-
-
-
-
-
+```
 
 
 
