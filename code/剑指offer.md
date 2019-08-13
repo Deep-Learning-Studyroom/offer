@@ -67,33 +67,30 @@ print(find_dupplicat_number([2,3,5,4,3,2,6,7]))
 
 >在一个二维数组中，每一行都按照从左到右递增的顺序，每一列都按照从上到下递增的顺序。请完成这样一个函数，输入这样一个二维数组和一个整数，判断数组中是否含有该整数。
 
-解法：讲num和arr的右上角的数字比较，如果num更小，那么最右边那一列就不考虑了；如果num更大，那么就在最右边那一列寻找。比较num和右下角的数字，如果num更大，那么数组中不存在num这个数字；如果num小于等于右下角的数字，那么就遍历最右边那一列的数字，找不到就不存在，否则就存在。
+解法：首先比较target和array最小和最大的数，看看是不是在两者之间，否则就返回False。然后while循环，比较target是否小于右上角的数，
+如果小于，就把cols减一。然后比较最右边的一列和target的大小，如果有相等的就返回True，如果有大于target的就遍历当前行，如果有相等的就返回
+True。如果遍历结束还没有返回，就返回False。
 
 ```python
-import numpy as np
-def find(arr, num):
-    """
-    arr是numpy的数组
-    """
-    m, n = arr.shape
-    print(m, n)
-    
-    while(num < arr[0, n-1]):
-        n -= 1
-        print(n)
-    if num > arr[m-1, n-1]:
-        print("num {} is not in arr".format(num))
-        return 0
-    else:
-        for value in arr[0:-1, n-1]:
-            if value == num:
-                print("num {} is in arr".format(num))
-                return 1
-        print("num {} is not in arr".format(num))
-        return 0
-
-arr = np.array([[1,2,8,9],[2,4,9,12],[4,7,10,13],[6,8,11,15]])
-find(arr, 8)
+# -*- coding:utf-8 -*-
+class Solution:
+    # array 二维列表
+    def Find(self, target, array):
+        # write code here
+        rows = len(array)
+        cols = len(array[0])
+        if not rows or not cols or target > array[rows - 1][cols - 1] or target < array[0][0]:
+            return False
+        while target < array[0][cols - 1]:
+            cols -= 1
+        for i in range(rows):
+            if array[i][cols - 1] == target:
+                return True
+            elif array[i][cols - 1] > target:
+                for j in range(cols):
+                    if array[i][j] == target:
+                        return True
+        return False
 ```
 
 # 面试题5：替换空格
