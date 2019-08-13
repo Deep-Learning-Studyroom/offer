@@ -3369,6 +3369,27 @@ def stock(nums):
 print(stock([9, 11, 8, 5, 7, 12, 16, 14])) # 11
 ```
 
+# 面试题64：求1+2+3+...+n
+
+>要求不能使用乘除法, for, while, if else, switch, case等关键字以及条件判断语句(A?B:C)
+
+```python
+# -*- coding:utf-8 -*-
+class Solution:
+    def __init__(self):
+        self.sum = 0
+    def Sum_Solution(self, n):
+        # write code here
+        self.getsum(n)
+        return self.sum
+    
+    def getsum(self, n):
+        self.sum += n
+        n -= 1
+        return n > 0 and self.getsum(n)
+```
+
+
 
 # 面试题67：把字符串转成整数
 
