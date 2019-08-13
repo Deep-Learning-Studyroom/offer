@@ -3389,7 +3389,28 @@ class Solution:
         return n > 0 and self.getsum(n)
 ```
 
+# 面试题65：不用加减乘除做加法
 
+>题目写一个函数，求两个整数之和，要求在函数体内不得使用"+", "-", "x", "/"四则运算符号。
+
+解法：首先对每一位进行异或，然后比较对应较小的一位是不是都是1，如果是则需要进位，当前位需要加1（求与并左移一位，得到的数和异或的数进行异或），
+直到没有进位为止。
+
+```python
+class Solution:
+    def Add(self, num1, num2):
+        # write code here
+        sum = 0
+        carry = 0
+        while num2:
+            sum = num1 ^ num2
+            carry = (num1 & num2) << 1
+            num1, num2 = sum, carry
+            print(num1, num2)
+        return num1
+print(Solution().Add(5, 17))
+print(Solution().Add(5, 20))
+```
 
 # 面试题67：把字符串转成整数
 
