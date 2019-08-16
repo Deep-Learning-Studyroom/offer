@@ -319,3 +319,131 @@ void swap3(int& x, int& y)  // 传引用
 	x ^= y;
 }
 ```
+
+#### Example-13 
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Animal
+{
+public:
+	string mouth;
+
+	void eat();
+	void sleep();
+};
+
+class Bird : public Animal
+{
+public:
+	void fly();
+};
+
+class Turtle : public Animal
+{
+public:
+	void swim();
+};
+
+void Animal::sleep()
+{
+	cout << "I am sleeping\n";
+}
+
+void Animal::eat()
+{
+	cout << "I am eating\n";
+}
+
+void Bird::fly()
+{
+	cout << "I am flying\n";
+}
+
+void Turtle::swim()
+{
+	cout << "I am swimming\n";
+}
+
+int main()
+{
+	Bird bird;
+	Turtle turtle;
+	bird.eat();
+    turtle.eat();
+	bird.fly();
+	turtle.swim();
+	return 0;
+}
+```
+
+#### Example-14
+```c++
+//继承中构造函数和析构函数的调用顺序
+#include <iostream>
+#include <string>
+using namespace std;
+
+class BaseClass
+{
+public:
+	int val_public;
+	BaseClass();
+	~BaseClass();
+	void doSomething();
+protected:
+	int val_protected;
+private:
+	int val_private;
+
+};
+
+class SubClass : public BaseClass
+{
+public:
+	SubClass();
+	~SubClass();
+};
+
+BaseClass::BaseClass()
+{
+	cout << "进入基类构造器\n";
+}
+
+BaseClass::~BaseClass()
+{
+	cout << "进入基类析构器\n";
+}
+
+void BaseClass::doSomething()
+{
+	cout << "进入基类doSomething函数\n";
+}
+
+SubClass::SubClass()
+{
+	cout << "进入子类构造器\n";
+}
+SubClass::~SubClass()
+{
+	cout << "进入子类析构器\n";
+}
+int main()
+{
+	SubClass subclass;
+	subclass.doSomething();
+	subclass.val_public = 10;
+	cout << "**********\n";
+	BaseClass baseclass;
+	baseclass.val_public = 10;
+	return 0;
+}
+```
+
+#### Example-15
+```c++
+
+```
+
