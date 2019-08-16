@@ -167,5 +167,155 @@ int main() {
 
 #### Example-9
 ```c++
+// 函数的重载
+#include <iostream>
 
+using namespace std;
+int calc(int val);
+int calc(int val1, int val2);
+int calc(int val1, int val2, int val3);
+
+int main() {
+	int val1 = 1;
+	int val2 = 2;
+	int val3 = 3;
+
+	int res1 = calc(val1);
+	int res2 = calc(val1, val2);
+	int res3 = calc(val1, val2, val3);
+
+	cout << res1 << endl << res2 << endl << res3 << endl;
+	return 0;
+}
+
+int calc(int val) {
+	int res = val * val;
+	return res;
+}
+
+int calc(int val1, int val2) {
+	int res = val1 * val2;
+	return res;
+}
+
+int calc(int val1, int val2, int val3) {
+	int res = val1 + val2 + val3;
+	return res;
+}
+```
+
+#### Example-10
+```c++
+//定义一个容纳10个整数的数组，这些整数来自用户输入。我们将计算这些值的累加和、平均值并输出。
+
+#include <iostream>
+using namespace std;
+
+
+int main() {
+	const unsigned short ITEM = 4;
+	int arr[ITEM];
+	cout << "请输入" << ITEM << "个整形数据" << endl;
+	for (int i = 0; i < ITEM; i++)
+	{
+		cout << "请输入第" << i + 1 << "个整数：";
+		cin >> arr[i];
+	}
+
+	int total = 0;
+	for (int j = 0; j < ITEM; j++)
+	{
+		total += arr[j];
+	}
+	cout << "总和是：" << total << endl;
+	cout << "平均值是：" << total / (ITEM * 1.0) << endl;
+	return 0;
+}
+
+
+```
+
+#### Example-11
+```c++
+//读取字符串输入并显示
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+	string str;
+	cout << "Please input a string\n";
+	getline(cin, str);
+	cout << str << endl;
+
+	cout << "Please input a string again\n";
+	cin >> str;  //可以看到，cin会忽略空格。所以要用上面的getline函数。
+	cout << str << endl;
+
+	return 0;
+}
+
+
+```
+
+#### Example-12
+```c++
+// 函数传址
+#include <iostream>
+using namespace std;
+void swap1(int x, int y);
+void swap2_1(int* x, int* y);
+void swap2_1(int* x, int* y);
+void swap3(int& x, int& y);
+
+int main() {
+	int x = 1;
+	int y = 2;
+	cout << "x:" << x << " y:" << y << endl;
+
+	swap1(x, y);
+	cout << "After swap(传值):" << x << " " << y << "\n";
+
+	x = 1;
+	y = 2;
+	swap2_1(&x, &y);
+	cout << "After swap(传址):" << x << " " << y << "\n";
+
+	x = 1;
+	y = 2;
+	swap3(x, y);
+	cout << "After swap(传引用):" << x << " " << y << "\n";
+
+	return 0;
+}
+
+void swap1(int x, int y)  // 传值
+{
+	x ^= y;
+	y ^= x;
+	x ^= y;
+}
+
+void swap2_1(int* x, int* y)  // 传址
+{
+	int temp;
+	temp = *x;
+	*x = *y;
+	*y = temp;
+}
+
+void swap2_2(int* x, int* y) // 传址，用异或来交换两个数
+{
+	*x ^= *y;
+	*y ^= *x;
+	*x ^= *y;
+}
+
+void swap3(int& x, int& y)  // 传引用
+{
+	x ^= y;
+	y ^= x;
+	x ^= y;
+}
 ```
