@@ -572,23 +572,18 @@ int main()
 #### Example-18
 ```c
 //c语言函数指针的例子，可能有些问题
-#include<stdio.h>
-int fun(int x, int y);
-
+//函数指针的例子
+#include<iostream>
+int fun(int x, int y) ;
+using namespace std;
 int main()
 {
 	int i, a, b;
-	int (*p)(); //声明一个函数指针
-	scanf("%d", &a);
+	int (*p)(int x, int y); //声明一个函数指针
+	cin >> a >> b;
 	p = fun; //给函数指针p赋值，使它指向函数fun
-
-	printf("请输入10个数字：\n");
-	for (int i = 0; i < 10; i++)
-	{
-		scanf("%d", &b);
-		a = (*p)(a, b); //使用指针p调用函数fun
-	}
-	printf("The max number is :%d", a);
+	i = (*p)(a, b);
+	cout << a << b << i << endl;
 	return 0;
 }
 
