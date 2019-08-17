@@ -444,6 +444,159 @@ int main()
 
 #### Example-15
 ```c++
+#include<iostream>
+#include<string>
+//基类
+class Pet
+{
+public:
+	Pet(std::string theName);
+	~Pet();
 
+	static int getCount();//作为一个接口
+protected:
+	std::string name;
+private:
+	static int count;
+};
+//子类
+class Dog : Pet
+{
+public:
+	Dog(std::string theName);
+};
+//子类
+class Cat : Pet
+{
+public:
+	Cat(std::string theName);
+};
+
+int Pet::count = 0;	//分配内存，初始化为0
+
+Pet::Pet(std::string theName)
+{
+	name = theName;
+	count++;
+
+	std::cout << "一只宠物出生了，名字叫做：" << name << "\n";
+}
+
+Pet::~Pet()
+{
+	count--;
+	std::cout << name << "挂掉了\n";
+}
+
+int Pet::getCount()
+{
+	return count;
+}
+
+Cat::Cat(std::string theName) :Pet(theName)
+{
+}
+
+Dog::Dog(std::string theName) : Pet(theName)
+{
+}
+
+int main()
+{
+	Dog dog("Tom");
+	Cat cat("Jerry");
+
+	std::cout << "已经诞生了" << Pet::getCount() << "只宠物\n\n";
+
+	{ //这里用大括号括起来，生成的两个对象会被销毁掉
+		Dog dog_2("Tom_2");
+		Cat cat_2("Jerry_2");
+
+		std::cout << "已经诞生了" << Pet::getCount() << "只宠物\n\n";
+	}
+
+	std::cout << "\n现在还剩" << Pet::getCount() << "宠物\n\n";
+
+	return 0;
+}
+
+```
+
+#### Example-16  
+
+```c++
+//动态数组
+#include<iostream>
+#include<string>
+int main()
+{
+	unsigned int count = 0;
+	std::cout << "please input the length of array:\n";
+	std::cin >> count;
+	int* x = new int[count];
+
+	for (int i = 0; i < count; i++)
+	{
+		x[i] = i;
+	}
+
+	for (int i = 0; i < count; i++)
+	{
+		std::cout << "x[" << i << "]的值是：" << x[i] << "\n";
+	}
+	return 0;
+}
+```
+
+#### Example-17 
+```c++
+//从函数或方法返回内存
+#include<iostream>
+
+int* newInt(int value)
+{
+	int* myInt = new int;
+	*myInt = value;
+	return myInt;
+}
+int main()
+{
+	int* x = newInt(20);
+	std::cout << *x;
+	delete x;
+	x = NULL;
+	return 0;
+}
+```
+
+#### Example-18
+```c
+//c语言函数指针的例子，可能有些问题
+#include<stdio.h>
+int fun(int x, int y);
+
+int main()
+{
+	int i, a, b;
+	int (*p)(); //声明一个函数指针
+	scanf("%d", &a);
+	p = fun; //给函数指针p赋值，使它指向函数fun
+
+	printf("请输入10个数字：\n");
+	for (int i = 0; i < 10; i++)
+	{
+		scanf("%d", &b);
+		a = (*p)(a, b); //使用指针p调用函数fun
+	}
+	printf("The max number is :%d", a);
+	return 0;
+}
+
+int fun(int x, int y)
+{
+	int z;
+	z = (x > y) ? x : y;
+	return (z);
+}
 ```
 
