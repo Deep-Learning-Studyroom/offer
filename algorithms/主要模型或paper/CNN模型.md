@@ -46,4 +46,20 @@ v3的主要改进点是**分解（Factorization）**，将7x7分解成两个一�
 
 Inception v4主要研究把inception模块结合残差结构的效果，发现残差结构可以****极大地加速训练，同时性能也有提升**，得到一个inception-resnet-v2网络和一个更深更优化的inception v4模型。
 
+# DenseNet
+
+## 网络结构
+
+**密集连接**。在每一个denseblock中，每一个特征图都会送到后面所有层的输入进行channel-wise的拼接。和resnet不同有两点，一个是每个
+residual block内部只有一个跳层连接，二是resnet的跳层连接是element-wise。
+
+**每个block之间是1x1卷积和avgpooling**。因为每个block内部是不会改变
+
+block里面的卷积层是不改变channel的，channel的改变是因为每次都会把之前的拼接起来。block内部特征图size不变，通过block之间的pooling减少size
+
+
+# ResNeXT
+
+中心思想：Inception那边把ResNet拿来搞了Inception-ResNet，这头ResNet也把Inception拿来搞了一个ResNeXt，
+主要就是单路卷积变成多个支路的多路卷积，不过分组很多，结构一致，进行分组卷积。
 
