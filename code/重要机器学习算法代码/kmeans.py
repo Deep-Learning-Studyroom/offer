@@ -7,9 +7,13 @@ def kmeans(data, k):
     cluster_center = np.zeros((k, n))   # k个聚类中心
 
     # 选择合适的初始聚类中心
-    j = np.random.randint(m)    # [0, m)
-    cluster_center[0] = data[j][:]   # 在已有数据中随机选择聚类中心，
-                                     # 也可以直接用随机的聚类中心
+    # 在已有数据中随机选择聚类中心
+    # 也可以直接用随机的聚类中心
+
+
+    init_list = np.random.randint(low=0, high=m, size=k)    # [0, m)
+    for index, j in enumerate(init_list):
+        cluster_center[index] = data[j][:]
 
     # 聚类
     cluster = np.zeros(m, dtype=np.int) - 1 # 所有样本尚未聚类
