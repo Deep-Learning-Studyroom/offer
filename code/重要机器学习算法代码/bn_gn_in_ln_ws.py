@@ -18,6 +18,7 @@ class Conv2d(nn.Conv2d):
 
 
 # BN
+#https://www.jianshu.com/p/f9e3fd264932  np.mean()中axis的介绍
 import numpy as np
 def BatcchNorm(x, gamma, beta, G=16):
 
