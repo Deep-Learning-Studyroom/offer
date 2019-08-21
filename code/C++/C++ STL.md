@@ -253,4 +253,34 @@ int main()
 
 ```
 
+# stack
+s.push(value);   //将value压入栈
+s.pop();         //将栈顶元素删除 
+s.top();         //返回栈顶元素
 
+
+## code 
+
+```c++
+#include <iostream>
+#include<stack>
+using namespace std;
+
+int main()
+{
+	stack<int> s;
+	for (int i = 0; i < 10; i++)
+	{
+		s.push(i);
+	}
+
+	int len = s.size();
+	for (int i = 0; i < len; i++)  
+	{
+		cout << s.top() << " ";
+		s.pop();
+	}
+
+	return 0;
+}
+```
