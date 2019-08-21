@@ -15,3 +15,33 @@ class Conv2d(nn.Conv2d):
         weight = weight / std.expand_as(weight)
         return F.conv2d(x, weight, self.bias, self.stride,
                         self.padding, self.dilation, self.groups)
+
+
+# BN
+import numpy as np
+def BatcchNorm(x, gamma, beta, G=16):
+
+    # x_shape:[N, C, H, W]
+    results = 0.
+    eps = 1e-5
+
+    x_mean = np.mean(x, axis=(0, 2, 3), keepdims=True)
+    x_var = np.var(x, axis=(0, 2, 3), keepdims=True)
+    x_normalized = (x - x_mean) / np.sqrt(x_var + eps)
+    results = gamma * x_normalized + beta
+    return results
+
+# GN 
+import numpy as np
+def GroupNorm(x, gamma, beta, G=16):
+
+    # x_shape:[N, C, H, W]
+    results = 0.
+    eps = 1e-5
+    x = np.reshape(x, (x.shape[0], G, x.shape[1]/16, x.shape[2], x.shape[3]))
+
+    x_mean = np.mean(x, axis=(2, 3, 4), keepdims=True)
+    x_var = np.var(x, axis=(2, 3, 4), keepdims=True)
+    x_normalized = (x - x_mean) / np.sqrt(x_var + eps)
+    results = gamma * x_normalized + beta
+    return results
