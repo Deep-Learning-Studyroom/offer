@@ -1405,25 +1405,22 @@ class Solution:
 #         self.next = None
 class Solution:
     # 返回ListNode
-    def ReverseList(self, pHead):
+    def ReverseList(self, head):
         # write code here
-        if pHead is None:
-            return None
-        if pHead.next is None:
-            return pHead
-        if pHead.next.next is None:
-            pHead.next.next = pHead
-            node = pHead.next
-            pHead.next = None
+        if head is None or head.next is None:
+            return head
+        if head.next.next is None:
+            node = head.next
+            node.next = head
+            head.next = None
             return node
-        node_b, node, node_n = None, pHead, pHead.next
-        while node.next is not None:
-            node_n = node.next  # 保存下一个节点下一次迭代用
-            node.next = node_b  # node的指针指向前一个节点
-            node_b = node       # 当前的节点是下一个节点的前一个节点，保存起来
-            node = node_n       # 节点往后移一步
-        # 还剩最后一个节点没改变指针
-        node.next = node_b
+        node_b, node, node_n = None, head, head.next
+        while node.next is not None:# 离开循环体时node是最后一个结点，每次只调整一个指针
+            node_n = node.next
+            node.next = node_b
+            node_b = node
+            node = node_n
+        node.next = node_b    
         return node
 ```
 
