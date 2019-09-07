@@ -175,5 +175,26 @@ class Solution:
 
 
 
+# 322. 硬币问题
+
+```python
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        db = []
+        for i in range(0, amount + 1):
+            db.append(amount + 1)
+        db[0] = 0
+        
+        for i in range(1, amount + 1):
+            for coin in coins:
+                if i >= coin:
+                    db[i] = min(db[i], db[i - coin] + 1) 
+        if db[amount] > amount:
+            result = -1
+        else:
+            result = db[amount]
+        return result
+```
+
 
 
