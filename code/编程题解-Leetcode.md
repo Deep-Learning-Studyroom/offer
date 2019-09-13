@@ -198,3 +198,30 @@ class Solution:
 
 
 
+# 39 组合总和
+
+```python
+class Solution:
+    def combinationSum(self, candidates, target):
+        candidates = sorted(candidates)
+        ans = []
+        cur = []
+        self.dfs(cur, 0, 0, ans, candidates, target)
+        return ans
+
+
+    def dfs(self, cur, sum, used, ans, candidates, target):
+        if sum > target:
+            return
+        if sum == target:
+            ans.append(cur)
+            return
+
+        for i in range(used, len(candidates)):
+            t = cur[:]
+            t.append(candidates[i])
+            self.dfs(t, sum + candidates[i], i, ans, candidates, target)
+            if sum + candidates[i] > target:
+                break
+```
+

@@ -517,6 +517,36 @@ class Solution:
             return False
 ```
 
+动态规划：
+
+```python
+class Solution:
+    def isMatch(self, s: str, pattern: str) -> bool:
+        len_s = len(s)
+        len_p = len(pattern)
+        dp = []
+        for i in range(len_s+1):
+            dp.append([0] * (len_p+1))
+        dp[0][0] = 1
+        for i in range(1, len_p+1):
+            dp[0][i] = i > 1 and "*" == pattern[i-1] and dp[0][i-2]
+
+        for i in range(1, len_s+1):
+            for j in range(1, len_p+1):
+                if s[i-1] == pattern[j-1]:
+                    dp[i][j] = dp[i-1][j-1]
+                elif pattern[j-1] == ".":
+                    dp[i][j] = dp[i-1][j-1]
+                elif pattern[j-1] == "*":
+                    if pattern[j-2] == s[i-1] or pattern[j-2] == ".":
+                        dp[i][j] = dp[i][j-2] or dp[i][j-1] or dp[i-1][j]
+                    else:
+                        dp[i][j] = dp[i][j-2]
+        return dp[-1][-1]
+```
+
+
+
 # 表示数值的字符串
 
 此题的关键在于始终用一个numeric来标识：到字符串的目前位置为止，前面的字符是否符合数值规范。然后数值可以被E或e隔开，E的前后都可以是一个完整数值。完整数值的第一为可以是+或者-号， 也可以是数字，当向后遍历出现不是数值的字符时，这个字符必须是”.”、E、e、或者是空（即字符串遍历结束），若已经遇见过E、e或者小数点，则后面只能出现数字（第一位可以是正负号）。 判断数值使使用ord（）函数判断Ascii码，在遍历的过程中不断对s进行切片操作，以模拟指针，也可以用一个index来模拟指针。另外注意在对s进行切片前，要判断长度，防止越界，如果当前位是最后一位，则将s置空。
