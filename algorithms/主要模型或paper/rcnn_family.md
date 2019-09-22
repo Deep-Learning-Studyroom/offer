@@ -72,7 +72,7 @@ label的分配方法是将与gt的iou大于0.5的作正例，其他的都为负�
 
 ## RPN细节
 
-1. RPN是个全卷积网络，这是为了与faster rcnn共享卷积层。图像经过VGG获得feature map后送入RPN，然后在feature  map的每个像素点上预测K个anchor的信息，其中坐标分支的feature map通道数变成了4K，分类分支变成了2K。这一过程是通过一个3x3卷积，然后每个分支各使用一个1x1卷积来实现的。同时注意因为使用了卷积这种预测方式，给anchor带来了translation invariant（平移不变性）。
+1. RPN是个全卷积网络，这是为了与faster rcnn的检测分支共享backbone卷积层。图像经过VGG获得feature map后送入RPN，然后在feature  map的每个像素点上预测K个anchor的信息，其中坐标分支的feature map通道数变成了4K，分类分支变成了2K。这一过程是通过一个3x3卷积，然后每个分支各使用一个1x1卷积来实现的。同时注意因为使用了卷积这种预测方式，给anchor带来了translation invariant（平移不变性）。
 2. 训练时分配label，获得positive label的anchor有两种：一种是与某个gt具有最大iou的anchor，另一种是与某个gt的iou超过0.7的anchor，所以一个GT可能会被分配多个anchor。与所有gt的iou都少于0.3的标为negative，其他的anchor不参与训练。损失函数和Fast R-CNN一致。
 3. 训练时，每个mini-batch是在一张图上随机采256个anchor进行训练，其中正负比例为1：1。如果这张图的正例不够128，那么就用负例补上。
 4. 为什么不能同时训练RPN和检测分支？ 因为检测分支是依赖于修正后的ROI的，并且我们实际上给了检测分支一个先验知识——“ROI里是有目标的”。如果在训练检测分支的同时改变获取ROI的参数，会使这个先验知识变得模糊。所以训练分四步：
