@@ -473,7 +473,7 @@ delete pointer;
 版本（构造器），那样往往会导致内存泄漏。  
 
 ### C++的多态
-
+[资料](https://www.cnblogs.com/Allen-rg/p/6927129.html)
 
 #### 重载、重写、重定义的的区别
 
